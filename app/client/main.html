@@ -2,9 +2,11 @@
   <title>Register</title>
 </head>
 
-<body ng-app="register">
+<body ng-app="register" layout="row">
   <nav></nav>
-  <section class="main" ng-view layout="column">
-    <!-- <inventory-list></inventory-list> -->
+  <section class="main" layout="row">
+    <div ng-view layout="column" flex="60"></div>
+    <order layout="column" flex>
+    </order>
   </section>
 </body>

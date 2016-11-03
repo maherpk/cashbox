@@ -9,9 +9,14 @@ import Router from './scripts/routes/routes';
 // importing services
 import Shift from './scripts/services/shift';
 import Category from './scripts/services/categories';
+import Item from './scripts/services/item';
+import Order from './scripts/services/order';
+
+// importing filters
+import itemName from './scripts/filters/itemName';
 
 // importing components;
-import inventoryListComponent from './scripts/components/inventory/list-component';
+import OrderComponent from './scripts/components/order/order';
 
 let app = angular.module('register', [
   'angular-meteor',
@@ -19,8 +24,11 @@ let app = angular.module('register', [
   'ngRoute'
 ])
   .config(Router)
+  .filter('itemName', itemName)
   .service('Shift', Shift)
   .service('Category', Category)
-  .component('inventoryList', inventoryListComponent);
+  .service('Item', Item)
+  .service('Order', Order)
+  .component('order', OrderComponent);
 
 export default app;

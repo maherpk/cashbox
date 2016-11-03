@@ -38,4 +38,22 @@ export default class Category {
 
     return defer.promise;
   }
+
+  items (catID) {
+    let defer = Q.get(this).defer();
+
+    Meteor.call('/orm/items/filter/', {
+      category_id: catID
+    }, (error, result) => {
+      if (error) {
+        defer.reject(error);
+      }
+
+      if (result) {
+        defer.resolve(result);
+      }
+    });
+
+    return defer.promise;
+  }
 }

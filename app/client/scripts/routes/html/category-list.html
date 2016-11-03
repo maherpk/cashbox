@@ -1,0 +1,21 @@
+  <div flex class="md-padding md-margin">
+    <md-grid-list
+        md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+        md-row-height-gt-md="1:1" md-row-height="1:1"
+        md-gutter="12px">
+
+        <md-grid-tile md-colspan="1" md-rowspan="1" md-whiteframe="1"
+          ng-repeat="item in $routeCtrl._items"
+          ng-click="$routeCtrl.addToOrder(item.id)">
+<!--           <md-grid-tile-header>
+            <h3>{{ item.id }}</h3>
+          </md-grid-tile-header> -->
+
+          <h1 style="text-align: center;">{{ item.name }}</h1>
+
+          <md-grid-tile-footer>
+            <h3>Rs. {{ item.price }}</h3>
+          </md-grid-tile-footer>
+        </md-grid-tile>
+    </md-grid-list>
+  </div>

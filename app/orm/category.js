@@ -16,10 +16,11 @@ Meteor.methods({
   },
   '/orm/category/edit': (catID, name) => {
     let timestamp = new Date();
-    Category.udpate({
-      name: name,
-      updated_at: timestamp
-    })
+    Category
+      .udpate({
+        name: name,
+        updated_at: timestamp
+      })
       .where({
         id: catID
       })
@@ -27,7 +28,9 @@ Meteor.methods({
       .run()[0];
   },
   '/orm/category/fetch': (catID) => {
-    return Category.select('*').where({id:catID}).returning(['id', 'name']).run()[0];
+    return Category.select('*').where({
+      id: catID
+    }).returning(['id', 'name']).run()[0];
   },
   '/orm/category/': () => {
     return Category.select('*').returning(['id', 'name']).run();
