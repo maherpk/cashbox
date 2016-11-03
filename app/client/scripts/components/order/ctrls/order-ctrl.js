@@ -2,14 +2,17 @@
 
 const ORDER = new WeakMap();
 const ITEM = new WeakMap();
+const SHIFT = new WeakMap();
 
 export default class OrderCtrl {
-  constructor(Order, Item) {
+  constructor(Order, Item, Shift) {
     'ngInject';
     ORDER.set(this, Order);
     ITEM.set(this, Item);
+    SHIFT.set(this, Shift);
 
     this._items = [];
+    this._shift = false;
 
     this._init();
   }
@@ -19,6 +22,10 @@ export default class OrderCtrl {
       console.log(data);
       this._items = data;
     });
+  }
+
+  getShift () {
+    return SHIFT.get(this).current();
   }
 
   order () {
@@ -35,6 +42,14 @@ export default class OrderCtrl {
 
   total () {
     return ORDER.get(this).getTotal(this._items);
+  }
+
+  checkout () {
+
+  }
+
+  abort () {
+
   }
 
   // methods

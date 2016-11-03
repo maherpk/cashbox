@@ -1,0 +1,7 @@
+.action {
+  cursor:                       pointer;
+  &:focus {
+    outline:                    none;
+    border:                      0;
+ }
+}

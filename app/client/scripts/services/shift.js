@@ -3,7 +3,7 @@ const Q = new WeakMap();
 export default class Shift {
   constructor($q) {
     'ngInject';
-    this.current = undefined;
+    this._current = undefined;
     Q.set(this, $q);
   }
 
@@ -17,7 +17,7 @@ export default class Shift {
       }
 
       if (result) {
-        this.current = result;
+        this._current = result;
         defer.resolve(result);
       }
     });
@@ -42,5 +42,9 @@ export default class Shift {
     });
 
     return defer.promise;
+  }
+
+  current () {
+    return this._current;
   }
 }
