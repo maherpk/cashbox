@@ -27,11 +27,6 @@ export default class CategoryListCtrl {
 
   addToOrder (itemID) {
     ORDER.get(this).addItem(itemID);
-    LOCATION.get(this).path('/cat/');
-    // console.log(ORDER.get(this).order());
+    LOCATION.get(this).path('/cats/');
   }
-
-  // removeFromOrder (itemID) {
-  //   ORDER.get(this).removeItem(itemID);
-  // }
 }

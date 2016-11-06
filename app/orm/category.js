@@ -10,11 +10,10 @@ Meteor.methods({
   // '/todos/setText': function (todoId, newText) {
   //   Todos.update({text: newText}).where({id: todoId}).run();
   // }
-  '/orm/category/add': (obj) => {
-    return Category.insert(obj)
-      .returning(['id', 'name']).run()[0];
+  '/orm/category/add/': (obj) => {
+    return Category.insert(obj).run()[0];
   },
-  '/orm/category/edit': (catID, name) => {
+  '/orm/category/edit/': (catID, name) => {
     let timestamp = new Date();
     Category
       .udpate({
@@ -24,15 +23,14 @@ Meteor.methods({
       .where({
         id: catID
       })
-      .returning(['id', 'name'])
       .run()[0];
   },
-  '/orm/category/fetch': (catID) => {
+  '/orm/category/fetch/': (catID) => {
     return Category.select('*').where({
       id: catID
-    }).returning(['id', 'name']).run()[0];
+    }).run()[0];
   },
   '/orm/category/': () => {
-    return Category.select('*').returning(['id', 'name']).run();
+    return Category.select('*').run();
   }
 });

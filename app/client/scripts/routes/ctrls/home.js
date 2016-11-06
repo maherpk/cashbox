@@ -7,17 +7,22 @@ export default class HomeCtrl {
 
     SHIFT.set(this, Shift);
     LOCATION.set(this, $location);
+
+    Shift.latest().then(shift => {
+      if (!shift.ended_at) {
+        Shift.setCurrent(shift);
+        $location.path('/cats/');
+      }
+    });
   }
 
   // methods
   startShift () {
-    console.log('I am starting shift');
-    // SHIFT.get(this).all().then(data => {
-    //   console.log(data);
-    // });
     SHIFT.get(this).start().then((data) => {
       console.log(data);
       LOCATION.get(this).path('/cats/');
+    }, (error) => {
+      console.log(error);
     });
   }
 }

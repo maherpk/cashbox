@@ -1,12 +1,19 @@
 <md-content class="md-padding md-margin" layout="row" ng-if="$ctrl.getShift()">
   <div layout="column" layout-fill>
+    <div layout="row">
+      <md-button class="md-raised md-primary"
+        ng-click="$ctrl.endShift()"
+        flex>
+          End Shift
+      </md-button>
+    </div>
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Current Order</h2>
       </div>
     </md-toolbar>
     <md-list class="md-dense">
-      <md-list-item class="secondary-button-padding" ng-repeat="item in $ctrl.order()">
+      <md-list-item class="secondary-button-padding" ng-repeat="item in $ctrl.order() track by item.item_id">
         <p>{{ item.item_id | itemName:$ctrl._items }}</p>
         <md-button class="md-secondary md-fab md-accent" ng-click="$ctrl.decrement(item.item_id)">-</md-button>
         <div class="md-secondary"><h1>{{ item.quantity }}</h1></div>
@@ -21,7 +28,9 @@
     </md-list>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <md-button class="md-raised md-primary">Checkout</md-button>
+        <md-button class="md-raised md-primary"
+          ng-disabled="$ctrl.order().length < 1"
+          ng-click="$ctrl.save()">Checkout</md-button>
         <md-button class="md-raised md-accent">Cancel</md-button>
       </div>
     </md-toolbar>

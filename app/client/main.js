@@ -11,6 +11,7 @@ import Shift from './scripts/services/shift';
 import Category from './scripts/services/categories';
 import Item from './scripts/services/item';
 import Order from './scripts/services/order';
+import Transaction from './scripts/services/transaction';
 
 // importing filters
 import itemName from './scripts/filters/itemName';
@@ -29,6 +30,17 @@ let app = angular.module('register', [
   .service('Category', Category)
   .service('Item', Item)
   .service('Order', Order)
-  .component('order', OrderComponent);
+  .service('Transaction', Transaction)
+  .component('order', OrderComponent)
+  .run(($rootScope, $location, Shift) => {
+    'ngInject';
+
+    $rootScope.$on('$routeChangeStart', (event, next, current) => {
+      if (next && !Shift.current()) {
+        //event.preventDefault();
+        $location.path('/');
+      }
+    });
+  });
 
 export default app;

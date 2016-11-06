@@ -26,7 +26,7 @@ export default class Category {
   add(obj) {
     let defer = Q.get(this).defer();
 
-    Meteor.call('/orm/category/add', obj, (error, result) => {
+    Meteor.call('/orm/category/add/', obj, (error, result) => {
       if (error) {
         defer.reject(error);
       }

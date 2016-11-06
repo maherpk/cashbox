@@ -3,13 +3,15 @@
 const ORDER = new WeakMap();
 const ITEM = new WeakMap();
 const SHIFT = new WeakMap();
+const LOCATION = new WeakMap();
 
 export default class OrderCtrl {
-  constructor(Order, Item, Shift) {
+  constructor(Order, Item, Shift, $location) {
     'ngInject';
     ORDER.set(this, Order);
     ITEM.set(this, Item);
     SHIFT.set(this, Shift);
+    LOCATION.set(this, $location);
 
     this._items = [];
     this._shift = false;
@@ -46,6 +48,18 @@ export default class OrderCtrl {
 
   checkout () {
 
+  }
+
+  save () {
+    ORDER.get(this).save();
+    ORDER.get(this).reset();
+    LOCATION.get(this).path('/');
+
+  }
+
+  endShift () {
+    SHIFT.get(this).end();
+    LOCATION.get(this).path('/');
   }
 
   abort () {

@@ -1,13 +1,20 @@
 import _ from 'lodash';
 
+const SHIFT = new WeakMap();
+const TRANSACTION = new WeakMap();
+
 export default class Order {
-  constructor() {
+  constructor(Shift, Transaction) {
+    'ngInject';
     this._defaultOrder = [];
     this._order = [];
+
+    SHIFT.set(this, Shift);
+    TRANSACTION.set(this, Transaction);
   }
 
   order() {
-    return this._order = (this._order.length) ? this._order : angular.copy(this._defaultOrder);
+    return this._order = (this._order.length) ? this._order : _.clone(this._defaultOrder);
   }
 
   addItem(itemID) {
@@ -39,6 +46,24 @@ export default class Order {
     });
 
     return total;
+  }
+
+  save () {
+    let shiftID = SHIFT.get(this).current().id;
+    let obj = {
+      shift_id: shiftID
+    };
+    TRANSACTION.get(this).save(obj).then(data => {
+      console.log(data);
+      _.forEach(this._order, (singleton) => {
+        singleton.transaction_id = data;
+        TRANSACTION.get(this).addLineItem(singleton);
+      });
+    });
+  }
+
+  reset () {
+    this._order = _.clone(this._defaultOrder);
   }
 
 }

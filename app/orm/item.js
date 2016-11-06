@@ -13,12 +13,12 @@ Meteor.methods({
   '/orm/items/fetch/': (itemID) => {
     return Item.select('*').where({
       id: itemID
-    }).returning(['id', 'name', 'price']).run()[0];
+    }).run()[0];
   },
   '/orm/items/': () => {
-    return Item.select('*').returning(['id', 'name', 'price']).run();
+    return Item.select('*').run();
   },
   '/orm/items/filter/': (filter) => {
-    return Item.select('*').where(filter).returning(['id', 'name', 'price']).run();
+    return Item.select('*').where(filter).run();
   }
 });
