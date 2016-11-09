@@ -77,7 +77,7 @@ export default class Order {
 
   unhold(order) {
     if (this._order.length) {
-      hold();
+      this._hold.push(this._order);
     }
     let index = this._hold.indexOf(order);
     this._hold.splice(index, 1);
