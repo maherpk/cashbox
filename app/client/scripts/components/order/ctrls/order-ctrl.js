@@ -15,13 +15,13 @@ export default class OrderCtrl {
 
     this._items = [];
     this._shift = false;
+    this._showPaymentTypes = false;
 
     this._init();
   }
 
   _init () {
     ITEM.get(this).all().then((data) => {
-      console.log(data);
       this._items = data;
     });
   }
@@ -50,8 +50,9 @@ export default class OrderCtrl {
 
   }
 
-  save () {
-    ORDER.get(this).save();
+  save (props) {
+    props = (props) ? {properties: props} : false;
+    ORDER.get(this).save(props);
     ORDER.get(this).reset();
     LOCATION.get(this).path('/');
 
@@ -60,6 +61,10 @@ export default class OrderCtrl {
   endShift () {
     SHIFT.get(this).end();
     LOCATION.get(this).path('/');
+  }
+
+  showPaymentTypes () {
+    this._showPaymentTypes = !this._showPaymentTypes;
   }
 
   abort () {

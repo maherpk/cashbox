@@ -48,14 +48,16 @@ export default class Order {
     return total;
   }
 
-  save () {
+  save (obj) {
+    obj = obj ? obj : {};
+    let order = _.clone(this._order);
     let shiftID = SHIFT.get(this).current().id;
-    let obj = {
-      shift_id: shiftID
-    };
+
+    obj.shift_id = shiftID;
+
     TRANSACTION.get(this).save(obj).then(data => {
       console.log(data);
-      _.forEach(this._order, (singleton) => {
+      _.forEach(order, (singleton) => {
         singleton.transaction_id = data;
         TRANSACTION.get(this).addLineItem(singleton);
       });

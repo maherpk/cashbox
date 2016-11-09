@@ -6,5 +6,8 @@ Meteor.methods({
   },
   '/orm/lineitems/filter/': (filter) => {
     return LineItem.select('*').where(filter).run();
+  },
+  '/orm/lineitems/range/': (start, end) => {
+    return LineItem.select('*').whereBetween('created_at'. start, end).run();
   }
 });

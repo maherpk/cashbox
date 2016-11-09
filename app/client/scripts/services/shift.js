@@ -59,11 +59,25 @@ export default class Shift {
   }
 
   current () {
-    console.log(this._current);
+    //this.allTransactions();
     return this._current;
   }
 
   setCurrent (shift) {
     this._current = _.clone(shift);
+  }
+
+  allTransactions (shift) {
+    shift = (shift) ? shift : this.current();
+    console.log(this._current);
+    let start = (shift.started_at) ? shift.started_at : new Date();
+    let end = (shift.ended_at) ? shift.ended_at : new Date();
+
+    let defer = Q.get(this).defer();
+
+    Meteor.call('/orm/transactions/range/', start, end, (error, result) => {
+      console.log(error);
+      console.log(result);
+    });
   }
 }

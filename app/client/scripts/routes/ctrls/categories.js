@@ -2,7 +2,7 @@ const CAT = new WeakMap();
 const LOCATION = new WeakMap();
 
 export default class CategoryCtrl {
-  constructor(Category, $location) {
+  constructor(Category, Shift, $location) {
     'ngInject';
 
     CAT.set(this, Category);
@@ -19,14 +19,13 @@ export default class CategoryCtrl {
     // start
     //
     this._init_();
+
+    Shift.allTransactions();
   }
 
   all () {
     CAT.get(this).all().then(data => {
       this.allCats = data;
-    });
-    CAT.get(this).items(1).then(data => {
-      console.log(data);
     });
   }
 
