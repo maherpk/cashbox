@@ -71,5 +71,13 @@ export default class OrderCtrl {
 
   }
 
+  hold () {
+    this._hold = ORDER.get(this).hold();
+  }
+
+  unhold(order) {
+    ORDER.get(this).unhold(order);
+  }
+
   // methods
 }

@@ -8,6 +8,7 @@ export default class Order {
     'ngInject';
     this._defaultOrder = [];
     this._order = [];
+    this._hold = [];
 
     SHIFT.set(this, Shift);
     TRANSACTION.set(this, Transaction);
@@ -66,6 +67,21 @@ export default class Order {
 
   reset () {
     this._order = _.clone(this._defaultOrder);
+  }
+
+  hold() {
+    this._hold.push(this._order);
+    this._order = _.clone(this._defaultOrder);
+    return this._hold;
+  }
+
+  unhold(order) {
+    if (this._order.length) {
+      hold();
+    }
+    let index = this._hold.indexOf(order);
+    this._hold.splice(index, 1);
+    this._order = _.clone(order);
   }
 
 }
