@@ -12,15 +12,19 @@ Npm.depends({
 });
 
 Package.onUse(function(api) {
+  api.versionsFrom('1.4.2');
   api.use('modules');
-  api.versionsFrom('1.1.0.3');
   api.use('ecmascript');
   api.use('underscore');
 
-  api.use('cosmos:browserify@0.5.0');
-  api.addFiles('sync-promise.browserify.js', 'client');
-  api.addFiles('bookshelf.browserify.js', 'client');
-  api.addFiles('bookshelf.browserify.options.json', 'client');
+  api.use('cosmos:browserify@0.9.2');
+  // api.addFiles(, 'client');
+  api.addFiles([
+    'sync-promise.browserify.js',
+    'bookshelf.browserify.js',
+    'bookshelf.browserify.options.json'
+  ], 'client');
+  // api.addFiles(, 'client');
 
   api.addFiles('knex.js');
   api.addFiles('bookshelf.js');
