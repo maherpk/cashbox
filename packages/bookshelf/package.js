@@ -12,6 +12,7 @@ Npm.depends({
 });
 
 Package.onUse(function(api) {
+  api.use('modules');
   api.versionsFrom('1.1.0.3');
   api.use('ecmascript');
   api.use('underscore');
