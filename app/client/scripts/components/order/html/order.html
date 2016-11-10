@@ -3,6 +3,7 @@
     <div layout="row">
       <md-button class="md-raised md-primary"
         ng-click="$ctrl.endShift()"
+        ng-hide="$ctrl._hideOrderBox"
         flex>
           End Shift
       </md-button>
@@ -12,7 +13,8 @@
       <md-button class="md-secondary md-fab md-accent md-mini" ng-click="$ctrl.unhold(holded)">{{ $index + 1 }}</md-button>
       </div>
     </div>
-    <div layout="column" class="md-margin" md-whiteframe="2">
+    {{ $routeCtrl._hideOrderBox }}
+    <div layout="column" class="md-margin" md-whiteframe="2" ng-hide="$ctrl._hideOrderBox">
       <md-toolbar>
         <div class="md-toolbar-tools">
           <h2>Current Order</h2>
@@ -35,11 +37,11 @@
       <md-toolbar>
         <div class="md-toolbar-tools" ng-if="$ctrl._showPaymentTypes">
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.save({transaction_type: 'card'})">
+            ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()})">
             Card
           </md-button>
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.save({transaction_type: 'cash'})">
+            ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()})">
             Cash
           </md-button>
         </div>

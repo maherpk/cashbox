@@ -18,7 +18,7 @@ export default class CategoryListCtrl {
   }
 
   _init () {
-    console.log(ORDER.get(this));
+    //console.log(ORDER.get(this));
     let id = RouteParams.get(this).catID;
     CAT.get(this).items(id).then(data => {
       this._items = data;

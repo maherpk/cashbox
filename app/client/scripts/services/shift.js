@@ -69,15 +69,22 @@ export default class Shift {
 
   allTransactions (shift) {
     shift = (shift) ? shift : this.current();
-    console.log(this._current);
-    let start = (shift.started_at) ? shift.started_at : new Date();
-    let end = (shift.ended_at) ? shift.ended_at : new Date();
+    // console.log(this._current);
+    // let start = (shift.started_at) ? shift.started_at : new Date();
+    // let end = (shift.ended_at) ? shift.ended_at : new Date();
 
     let defer = Q.get(this).defer();
 
-    Meteor.call('/orm/transactions/range/', start, end, (error, result) => {
-      console.log(error);
-      console.log(result);
+    Meteor.call('/orm/transactions/filter/', { shift_id: shift.id }, (error, result) => {
+      if (error) {
+        defer.reject(error);
+      }
+
+      if (result) {
+        defer.resolve(result);
+      }
     });
+
+    return defer.promise;
   }
 }

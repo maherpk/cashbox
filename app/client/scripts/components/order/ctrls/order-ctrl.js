@@ -16,6 +16,7 @@ export default class OrderCtrl {
     this._items = [];
     this._shift = false;
     this._showPaymentTypes = false;
+    this._hideOrderBox = false;
 
     this._init();
   }
@@ -59,8 +60,8 @@ export default class OrderCtrl {
   }
 
   endShift () {
-    SHIFT.get(this).end();
-    LOCATION.get(this).path('/');
+    this._hideOrderBox = true;
+    LOCATION.get(this).path('/summary/');
   }
 
   showPaymentTypes () {

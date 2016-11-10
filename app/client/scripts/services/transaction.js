@@ -23,8 +23,19 @@ export default class Transaction {
     let defer = Q.get(this).defer();
 
     Meteor.call('/orm/lineitems/add/', obj, (error, result) => {
-      console.log(error);
-      console.log(result);
+      // console.log(error);
+      // console.log(result);
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+
+    return defer.promise;
+  }
+
+  getLineItems (transactionId) {
+    let defer = Q.get(this).defer();
+
+    Meteor.call('/orm/lineitems/filter/', {transaction_id: transactionId}, (error, result) =>{
       (error) ? defer.reject(error) : false;
       (result) ? defer.resolve(result) : false;
     });

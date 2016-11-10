@@ -1,0 +1,25 @@
+<div layout="row">
+	<div flex>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>
+		          <span>Shift Summary</span>
+		        </h2>
+	        </div>
+		</md-toolbar>
+		<md-content>
+			<md-list class="md-dense" flex>
+				<md-subheader class="md-no-sticky">Transactions</md-subheader>
+				<md-list-item class="md-3-line" ng-repeat="trans in $routeCtrl._transactions track by $index">
+		          <div class="md-list-item-text" layout="column">
+		          	<img ng-src="public/imgs/ic_local_atm_black_24px.svg">
+		            <h3>{{ trans.transaction.created_at | date:'medium' }}</h3>
+		            <h4>{{ trans.transaction.properties.transaction_type }}</h4>
+		            <h2>{{ trans.transaction.properties.total }}</h2>
+		          </div>
+		        </md-list-item>
+		        <md-divider ></md-divider>
+			</md-list>
+		</md-content>
+	</div>
+</div>
