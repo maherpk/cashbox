@@ -68,7 +68,7 @@ export default class OrderCtrl {
   }
 
   abort () {
-
+    ORDER.get(this).reset();
   }
 
   hold () {
