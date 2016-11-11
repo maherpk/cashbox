@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('shifts', (table) => {
+    knex.schema.createTableIfNotExists('shifts', (table) => {
       table.increments();
       table.timestamps(true, true);
       table.timestamp('started_at');

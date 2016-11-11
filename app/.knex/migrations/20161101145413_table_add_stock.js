@@ -1,12 +1,12 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('suppliers', (table) => {
+    knex.schema.createTableIfNotExists('suppliers', (table) => {
       table.increments();
       table.timestamps(true, true);
       table.string('name').notNullable();
-      table.jsonb('properties');
+      //table.jsonb('properties');
     }),
-    knex.schema.createTable('supplies', (table) => {
+    knex.schema.createTableIfNotExists('supplies', (table) => {
       table.increments();
       table.timestamps(true, true);
       table.bigInteger('item_id').unsigned().index();

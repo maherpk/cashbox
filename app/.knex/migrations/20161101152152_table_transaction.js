@@ -1,14 +1,14 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('transactions', (table) => {
+    knex.schema.createTableIfNotExists('transactions', (table) => {
       table.increments();
       table.timestamps(true, true);
       table.bigInteger('shift_id').unsigned().index();
       table.foreign('shift_id').references('shifts.id');
       // table.uuid('uuid').defaultTo(knex.raw('uuid_generate_v4()'));
-      table.jsonb('properties');
+      table.json('properties');
     }),
-    knex.schema.createTable('line_items', (table) => {
+    knex.schema.createTableIfNotExists('line_items', (table) => {
       table.increments();
       table.bigInteger('quantity').unsigned();
       table.decimal('discount');

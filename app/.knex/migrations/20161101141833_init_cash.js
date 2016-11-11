@@ -1,11 +1,11 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('categories', (table) => {
+    knex.schema.createTableIfNotExists('categories', (table) => {
       table.increments();
       table.timestamps(true, true);
       table.string('name').notNullable();
     }),
-    knex.schema.createTable('items', (table) => {
+    knex.schema.createTableIfNotExists('items', (table) => {
       table.increments();
       table.timestamps(true, true);
       table.string('name').notNullable().unique();
