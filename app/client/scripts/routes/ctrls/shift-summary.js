@@ -20,7 +20,8 @@ export default class ShiftSummaryCtrl {
   	this._currentShift = SHIFT.get(this).current();
 
   	SHIFT.get(this).allTransactions().then(r => {
-    	this._transactionItems(r);
+      console.log(r);
+      this._transactions = r;
     });
 
   }
