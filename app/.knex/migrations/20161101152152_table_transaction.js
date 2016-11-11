@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
       table.bigInteger('shift_id').unsigned().index();
       table.foreign('shift_id').references('shifts.id');
       // table.uuid('uuid').defaultTo(knex.raw('uuid_generate_v4()'));
-      table.json('properties');
+      table.jsonb('properties');
     }),
     knex.schema.createTableIfNotExists('line_items', (table) => {
       table.increments();
