@@ -42,6 +42,17 @@ export default class Transaction {
 
     return defer.promise;
   }
+
+  getSalesTax () {
+    let defer = Q.get(this).defer();
+
+    Meteor.call('/orm/setting/salestax/', (error, result) =>{
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+
+    return defer.promise;
+  }
 }
 
 // export default class Shift {

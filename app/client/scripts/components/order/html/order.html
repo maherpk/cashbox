@@ -30,17 +30,27 @@
       <md-list>
         <md-list-item>
           <div><h1>Total:</h1></div>
-          <div class="md-secondary"> {{ $ctrl.total() }} </div>
+          <div class="md-secondary"> {{ $ctrl.total() | currency:"Rs. " }} </div>
+        </md-list-item>
+        <md-list-item>
+          <div><h1>Sales Tax:</h1></div>
+          <div class="md-secondary"> {{ $ctrl.tax() | currency:"Rs. " }} </div>
+        </md-list-item>
+        <md-divider ></md-divider>
+        <md-divider ></md-divider>
+        <md-list-item>
+          <div><h1>Grand Total:</h1></div>
+          <div class="md-secondary"> {{ $ctrl.tax() +  $ctrl.total() | currency:"Rs. " }} </div>
         </md-list-item>
       </md-list>
       <md-toolbar>
         <div class="md-toolbar-tools" ng-if="$ctrl._showPaymentTypes">
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()})">
+            ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">
             Card
           </md-button>
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()})">
+            ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">
             Cash
           </md-button>
         </div>

@@ -9,6 +9,7 @@ export default class Order {
     this._defaultOrder = [];
     this._order = [];
     this._hold = [];
+    this._salesTax = 0;
 
     SHIFT.set(this, Shift);
     TRANSACTION.set(this, Transaction);
@@ -47,6 +48,17 @@ export default class Order {
     });
 
     return total;
+  }
+
+  getTax (amount) {
+    if (this._salesTax == 0) {
+      TRANSACTION.get(this).getSalesTax().then(data => {
+        this._salesTax = parseInt(data.value);
+      });
+    }
+
+    let taxed = (parseInt(this._salesTax) / 100) * parseInt(amount)
+    return taxed;
   }
 
   save (obj) {

@@ -45,9 +45,9 @@ export default class ShiftSummaryCtrl {
     console.log(transactions);
     angular.forEach(transactions, (singleton) =>{
       if (singleton.properties.transaction_type=="cash") {
-        this._totalCash += parseInt(singleton.properties.total);
+        this._totalCash += parseFloat(singleton.properties.total);
       } else if (singleton.properties.transaction_type=="card") {
-        this._totalCard += parseInt(singleton.properties.total);
+        this._totalCard += parseFloat(singleton.properties.total);
       }
     });
   }

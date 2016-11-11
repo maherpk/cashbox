@@ -47,6 +47,10 @@ export default class OrderCtrl {
     return ORDER.get(this).getTotal(this._items);
   }
 
+  tax () {
+    return ORDER.get(this).getTax(this.total());
+  }
+
   checkout () {
 
   }
