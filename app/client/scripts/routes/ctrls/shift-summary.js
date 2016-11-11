@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const SHIFT = new WeakMap();
 const LOCATION = new WeakMap();
 const TRANSACTION = new WeakMap();
@@ -11,6 +13,8 @@ export default class ShiftSummaryCtrl {
     TRANSACTION.set(this, Transaction);
     
     this._transactions = [];
+    this._totalCash = 0;
+    this._totalCard = 0;
 
     this._init();
   }
@@ -20,10 +24,10 @@ export default class ShiftSummaryCtrl {
   	this._currentShift = SHIFT.get(this).current();
 
   	SHIFT.get(this).allTransactions().then(r => {
-      console.log(r);
+      //console.log(r);
       this._transactions = r;
+      this._shiftTotal(r);
     });
-
   }
 
   _transactionItems(trans) {
@@ -37,8 +41,23 @@ export default class ShiftSummaryCtrl {
   	});
   }
 
+  _shiftTotal(transactions) {
+    console.log(transactions);
+    angular.forEach(transactions, (singleton) =>{
+      if (singleton.properties.transaction_type=="cash") {
+        this._totalCash += parseInt(singleton.properties.total);
+      } else if (singleton.properties.transaction_type=="card") {
+        this._totalCard += parseInt(singleton.properties.total);
+      }
+    });
+  }
+
   endShift() {
   	SHIFT.get(this).end();
   	LOCATION.get(this).path('/');
+  }
+
+  cancel() {
+    LOCATION.get(this).path('/');
   }
 }

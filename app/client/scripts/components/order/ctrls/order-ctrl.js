@@ -16,7 +16,6 @@ export default class OrderCtrl {
     this._items = [];
     this._shift = false;
     this._showPaymentTypes = false;
-    this._hideOrderBox = false;
 
     this._init();
   }
@@ -25,6 +24,7 @@ export default class OrderCtrl {
     ITEM.get(this).all().then((data) => {
       this._items = data;
     });
+    this._hideOrderBox = false;
   }
 
   getShift () {
