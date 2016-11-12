@@ -60,7 +60,7 @@ export default class OrderCtrl {
     ORDER.get(this).save(props);
     ORDER.get(this).reset();
     LOCATION.get(this).path('/');
-
+    this._showPaymentTypes = !this._showPaymentTypes;
   }
 
   endShift () {
