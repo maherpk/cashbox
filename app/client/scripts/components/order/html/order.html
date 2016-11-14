@@ -3,7 +3,6 @@
     <div layout="row">
       <md-button class="md-raised md-primary"
         ng-click="$ctrl.endShift()"
-        ng-hide="$ctrl._hideOrderBox"
         flex>
           End Shift
       </md-button>
@@ -13,7 +12,7 @@
       <md-button class="md-secondary md-fab md-accent md-mini" ng-click="$ctrl.unhold(holded)">{{ $index + 1 }}</md-button>
       </div>
     </div>
-    <div layout="column" class="md-margin" md-whiteframe="2" ng-hide="$ctrl._hideOrderBox">
+    <div layout="column" class="md-margin" md-whiteframe="2">
       <md-toolbar>
         <div class="md-toolbar-tools">
           <h2>Current Order</h2>
