@@ -33,7 +33,7 @@
     		</div>
 			<md-list class="md-dense" flex>
 				<md-subheader class="md-no-sticky">Transactions</md-subheader>
-				<md-list-item class="noright" ng-repeat="trans in $routeCtrl._transactions track by $index">
+				<md-list-item class="noright" ng-repeat="trans in $routeCtrl._transactions track by $index" ng-click="$routeCtrl.transactionDetail(trans)">
 		          	<img alt="cash" ng-src="https://media.acecash.com/~/media/ACE/Images/hand-money-il" class="md-avatar" ng-show="trans.properties.transaction_type=='cash'">
 		          	<img alt="card" ng-src="https://www.goodfreephotos.com/albums/vector-images/credit-card-vector-graphics.png" class="md-avatar" ng-show="trans.properties.transaction_type=='card'">
 		            <p>{{ trans.created_at | date:'medium' }}</p>

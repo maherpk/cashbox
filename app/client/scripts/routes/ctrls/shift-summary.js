@@ -5,7 +5,7 @@ const LOCATION = new WeakMap();
 const TRANSACTION = new WeakMap();
 
 export default class ShiftSummaryCtrl {
-  constructor (Shift, $location, Transaction) {
+  constructor (Shift, $location, Transaction, $mdDialog) {
     'ngInject';
 
     SHIFT.set(this, Shift);
@@ -15,6 +15,8 @@ export default class ShiftSummaryCtrl {
     this._transactions = [];
     this._totalCash = 0;
     this._totalCard = 0;
+    this._selectedPurchaseItems = [];
+    this._selectedPurchase = {};
 
     this._init();
   }
@@ -32,13 +34,12 @@ export default class ShiftSummaryCtrl {
 
   _transactionItems(trans) {
   	let transBook = {};
-  	angular.forEach(trans, (t) => {
-  		transBook['transaction'] = t;
   		TRANSACTION.get(this).getLineItems(t.id).then(r => {
   			transBook['items'] = r;
   		});
   		this._transactions.push(transBook);
-  	});
+
+    return transBook;
   }
 
   _shiftTotal(transactions) {
@@ -49,6 +50,13 @@ export default class ShiftSummaryCtrl {
       } else if (singleton.properties.transaction_type=="card") {
         this._totalCard += parseFloat(singleton.properties.total);
       }
+    });
+  }
+
+  transactionDetail(trans) {
+    this._selectedPurchase = _.clone(trans);
+    TRANSACTION.get(this).getLineItems(trans.id).then(r => {
+      this._purchase = _.clone(r);
     });
   }
 
