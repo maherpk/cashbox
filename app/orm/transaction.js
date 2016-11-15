@@ -1,3 +1,5 @@
+console.log(Escpos);
+
 let Transaction = new PG.Table('transactions');
 
 Meteor.methods({

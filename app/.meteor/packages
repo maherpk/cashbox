@@ -34,3 +34,4 @@ spacebars
 check
 
 simple:pg
+local:escpos
