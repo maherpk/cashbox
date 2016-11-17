@@ -2,17 +2,33 @@ import _ from 'lodash';
 
 const SHIFT = new WeakMap();
 const TRANSACTION = new WeakMap();
+const ITEM = new WeakMap();
 
 export default class Order {
-  constructor(Shift, Transaction) {
+  constructor(Shift, Transaction, Item, $filter) {
     'ngInject';
     this._defaultOrder = [];
     this._order = [];
     this._hold = [];
     this._salesTax = 0;
+    this._currentTransaction = 0;
+    this.$filter = $filter;
+    this._items = [];
+    this._blankItem = {};
+    this._renderdItems = [];
+    this._renderTransaction = {};
 
     SHIFT.set(this, Shift);
     TRANSACTION.set(this, Transaction);
+    ITEM.set(this, Item);
+
+    this._init();
+  }
+
+  _init() {
+    ITEM.get(this).all().then((data) => {
+      this._items = data;
+    });
   }
 
   order() {
@@ -41,6 +57,7 @@ export default class Order {
   }
 
   getTotal (allItems) {
+    this.allItems
     let total = 0;
     _.forEach(this._order, (singleton) => {
       let idx = _.findIndex(allItems, {id: singleton.item_id});
@@ -67,14 +84,31 @@ export default class Order {
     let shiftID = SHIFT.get(this).current().id;
 
     obj.shift_id = shiftID;
-
     TRANSACTION.get(this).save(obj).then(data => {
-      console.log(data);
+      this._currentTransaction = data;
       _.forEach(order, (singleton) => {
         singleton.transaction_id = data;
         TRANSACTION.get(this).addLineItem(singleton);
       });
     });
+    this.print(obj);
+  }
+
+  print(transaction) {
+    this._renderTransaction.trans = transaction;
+    let order = _.clone(this._order);
+      this._renderdItems = [];
+    _.forEach(order, (singleton) => {
+      let item = _.clone(this._blankItem);
+      item.Quantity = singleton.quantity;
+      item.Name = this.$filter('itemName')(singleton.item_id, this._items);
+      item.Price = this.$filter('itemPrice')(singleton.item_id, this._items) * singleton.quantity;
+      this._renderdItems.push(item);
+    });
+
+    this._renderTransaction.items = _.clone(this._renderdItems);
+    console.log(this._renderTransaction);
+    TRANSACTION.get(this).printTransaction(this._renderTransaction);
   }
 
   reset () {

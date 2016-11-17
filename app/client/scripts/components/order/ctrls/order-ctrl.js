@@ -74,6 +74,11 @@ export default class OrderCtrl {
 
   abort () {
     ORDER.get(this).reset();
+    LOCATION.get(this).path('/');
+  }
+
+  back () {
+    LOCATION.get(this).path('/');
   }
 
   hold () {
