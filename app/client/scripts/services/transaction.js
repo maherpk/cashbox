@@ -55,7 +55,6 @@ export default class Transaction {
   }
 
   printTransaction(data) {
-    console.log(data);
     let defer = Q.get(this).defer();
 
     Meteor.call('/orm/transactions/print/', data, (error, result) =>{

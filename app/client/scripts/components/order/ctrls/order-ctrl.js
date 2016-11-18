@@ -16,6 +16,7 @@ export default class OrderCtrl {
     this._items = [];
     this._shift = false;
     this._showPaymentTypes = false;
+    this._enableAgain = false;
 
     this._init();
   }
@@ -58,9 +59,22 @@ export default class OrderCtrl {
   save (props) {
     props = (props) ? {properties: props} : false;
     ORDER.get(this).save(props);
-    ORDER.get(this).reset();
-    LOCATION.get(this).path('/');
     this._showPaymentTypes = !this._showPaymentTypes;
+    this.print(props, true);
+  }
+
+  print (props, flag) {
+    if(angular.isUndefined(flag)) {
+      props = (props) ? {properties: props} : false;
+    }
+    ORDER.get(this).print(props).then(r => {
+      this._enableAgain = true;
+      LOCATION.get(this).path('/error/');
+    }, e =>{
+      ORDER.get(this).reset();
+      this._enableAgain = false;
+      LOCATION.get(this).path('/');
+    });
   }
 
   endShift () {

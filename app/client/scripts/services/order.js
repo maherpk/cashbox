@@ -3,9 +3,10 @@ import _ from 'lodash';
 const SHIFT = new WeakMap();
 const TRANSACTION = new WeakMap();
 const ITEM = new WeakMap();
+const Q = new WeakMap();
 
 export default class Order {
-  constructor(Shift, Transaction, Item, $filter) {
+  constructor(Shift, Transaction, Item, $filter, $q) {
     'ngInject';
     this._defaultOrder = [];
     this._order = [];
@@ -17,10 +18,12 @@ export default class Order {
     this._blankItem = {};
     this._renderdItems = [];
     this._renderTransaction = {};
+    this._printResponse = {};
 
     SHIFT.set(this, Shift);
     TRANSACTION.set(this, Transaction);
     ITEM.set(this, Item);
+    Q.set(this, $q);
 
     this._init();
   }
@@ -91,10 +94,10 @@ export default class Order {
         TRANSACTION.get(this).addLineItem(singleton);
       });
     });
-    this.print(obj);
   }
 
   print(transaction) {
+    let defer = Q.get(this).defer();
     this._renderTransaction.trans = transaction;
     let order = _.clone(this._order);
       this._renderdItems = [];
@@ -107,8 +110,16 @@ export default class Order {
     });
 
     this._renderTransaction.items = _.clone(this._renderdItems);
-    console.log(this._renderTransaction);
-    TRANSACTION.get(this).printTransaction(this._renderTransaction);
+    
+    TRANSACTION.get(this).printTransaction(this._renderTransaction).then(resp => {
+      if(resp.status != true) {
+        defer.resolve(resp.message);
+      } else {
+        defer.reject(true);
+      }
+    });
+    console.log(defer.promise);
+   return defer.promise;
   }
 
   reset () {

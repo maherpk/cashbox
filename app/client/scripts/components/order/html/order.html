@@ -48,7 +48,7 @@
         </md-list-item>
       </md-list>
       <md-toolbar>
-        <div class="md-toolbar-tools" ng-if="$ctrl._showPaymentTypes">
+        <div class="md-toolbar-tools" ng-if="$ctrl._showPaymentTypes" ng-hide="$ctrl._enableAgain">
           <md-button class="md-raised md-primary"
             ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">
             Card
@@ -58,12 +58,16 @@
             Cash
           </md-button>
         </div>
-        <div class="md-toolbar-tools" ng-if="!$ctrl._showPaymentTypes">
+        <div class="md-toolbar-tools" ng-if="!$ctrl._showPaymentTypes" ng-hide="$ctrl._enableAgain">
           <md-button class="md-raised md-hue"
             ng-disabled="$ctrl.order().length < 1"
             ng-click="$ctrl.showPaymentTypes()">Finalize</md-button>
           <md-button class="md-raised md-accent" ng-click="$ctrl.abort()">Cancel</md-button>
           <md-button class="md-raised" ng-click="$ctrl.hold()" ng-disabled="!$ctrl.total()">Hold</md-button>
+        </div>
+        <div class="md-toolbar-tools" ng-if="$ctrl._enableAgain">
+        <md-button class="md-raised md-hue"
+            ng-click="$ctrl.print({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">Try Again</md-button>
         </div>
       </md-toolbar>
     </div>
