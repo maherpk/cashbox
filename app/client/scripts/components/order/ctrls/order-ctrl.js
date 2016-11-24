@@ -67,14 +67,17 @@ export default class OrderCtrl {
     if(angular.isUndefined(flag)) {
       props = (props) ? {properties: props} : false;
     }
-    ORDER.get(this).print(props).then(r => {
-      this._enableAgain = true;
-      LOCATION.get(this).path('/error/');
-    }, e =>{
-      ORDER.get(this).reset();
-      this._enableAgain = false;
-      LOCATION.get(this).path('/');
-    });
+    ORDER.get(this).print(props);
+    ORDER.get(this).reset();
+    LOCATION.get(this).path('/');
+    // .then(r => {
+    //   this._enableAgain = true;
+    //   LOCATION.get(this).path('/error/');
+    // }, e =>{
+    //   ORDER.get(this).reset();
+    //   this._enableAgain = false;
+    //   LOCATION.get(this).path('/');
+    // });
   }
 
   endShift () {
