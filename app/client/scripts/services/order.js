@@ -19,6 +19,7 @@ export default class Order {
     this._renderdItems = [];
     this._renderTransaction = {};
     this._printResponse = {};
+    this._serves = [];
 
     SHIFT.set(this, Shift);
     TRANSACTION.set(this, Transaction);
@@ -138,6 +139,19 @@ export default class Order {
     }
     let index = this._hold.indexOf(order);
     this._hold.splice(index, 1);
+    this._order = _.clone(order);
+  }
+
+  serve() {
+    let order = this._order;
+    this._serves.push(order);
+    this._order = _.clone(this._defaultOrder);
+    return order;
+  }
+
+  closeServe(order) {
+    let index = this._serves.indexOf(order);
+    this._serves.splice(index, 1);
     this._order = _.clone(order);
   }
 
