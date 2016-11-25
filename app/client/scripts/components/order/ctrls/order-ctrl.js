@@ -41,7 +41,6 @@ export default class OrderCtrl {
       table.tableNumber = i+1;
       this._tables.push(table);
     }
-    console.log(this._tables);
   }
 
   getShift () {
