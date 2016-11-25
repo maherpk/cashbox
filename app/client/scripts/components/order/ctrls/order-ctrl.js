@@ -17,7 +17,7 @@ export default class OrderCtrl {
     this._shift = false;
     this._showPaymentTypes = false;
     this._enableAgain = false;
-    this._numbers = 8;
+    this._numbers = 10;
     this._tables = [];
     this._currentTable = null;
     this._serves = [];

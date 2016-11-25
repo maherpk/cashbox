@@ -3,5 +3,12 @@ section.main {
   @include padding(8px);
   width: calc(100vw);
   //height: calc(100vh - 5em); --causing componant section scroll
-  //height: calc(100vh);
+  height: calc(100vh);
+
+  .wrap { 
+  	-webkit-flex-wrap: wrap;
+  	flex-wrap: wrap;
+  } 
 }
+
+
