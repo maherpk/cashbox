@@ -22,7 +22,7 @@ export default class HomeCtrl {
         });
       }
     }, e => {
-      console.log(e);
+      //console.log(e);
     });
 
     Shift.latest().then(shift => {
@@ -36,10 +36,10 @@ export default class HomeCtrl {
   // methods
   startShift() {
     SHIFT.get(this).start().then((data) => {
-      console.log(data);
+      //console.log(data);
       LOCATION.get(this).path('/cats/');
     }, (error) => {
-      console.log(error);
+      //console.log(error);
     });
   }
 }

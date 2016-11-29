@@ -119,7 +119,7 @@ export default class Order {
         defer.reject(true);
       }
     });
-    console.log(defer.promise);
+    
    return defer.promise;
   }
 

@@ -11,7 +11,6 @@ import homeTpl from './html/home.html';
 import catTpl from './html/categories.html';
 import catListTpl from './html/category-list.html';
 import summaryTpl from './html/shift-summary.html';
-import errorTpl from './html/error.html';
 
 export default function Router($routeProvider) {
   'ngInject';
@@ -35,9 +34,6 @@ export default function Router($routeProvider) {
       templateUrl: catListTpl,
       controller: CategoryListCtrl,
       controllerAs: '$routeCtrl'
-    })
-    .when('/error/', {
-      templateUrl: errorTpl,
     })
     .otherwise('/');
 };

@@ -35,4 +35,3 @@ check
 
 simple:pg
 local:escpos
-local:json-to-table
