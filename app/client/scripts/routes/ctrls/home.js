@@ -16,7 +16,7 @@ export default class HomeCtrl {
           .title('Check Printer !')
           .textContent('Printer is not turned on, or cable is unplugged.')
           .ariaLabel('Check Printer')
-          .ok('Reload')
+          .ok('Try Again!')
         ).then(function() {
           $location.path('/');
         });
