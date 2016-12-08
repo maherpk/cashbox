@@ -2,12 +2,30 @@
   <div layout="column" layout-fill>
     <div layout="row">
       <md-button class="md-raised md-primary"
+        ng-click="$ctrl.back()"
+        flex>
+          Go Back
+      </md-button>
+      <md-button class="md-raised md-primary"
         ng-click="$ctrl.endShift()"
         flex>
           End Shift
       </md-button>
     </div>
-    <div layout="row" ng-show="$ctrl._hold.length">
+    <div layout="row" layout-align="center center">
+      <h1>Available Tables</h1>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" class="wrap">
+      <div ng-repeat="table in $ctrl._tables">
+        <md-button class="md-secondary md-fab md-warn md-mini md-hue-2" ng-hide="table.occupied" ng-click="$ctrl.setTable(table)">{{ table.tableNumber }}</md-button>
+      </div>
+    </div>
+    <div layout="row" layout-align="center center" ng-show="$ctrl._hold.length">
+      <h1>On Hold Orders</h1>
+    </div>
+    <md-divider ng-show="$ctrl._hold.length"></md-divider>
+    <div layout="row" ng-show="$ctrl._hold.length" class="wrap">
       <div ng-repeat="holded in $ctrl._hold">
       <md-button class="md-secondary md-fab md-accent md-mini" ng-click="$ctrl.unhold(holded)">{{ $index + 1 }}</md-button>
       </div>
@@ -28,6 +46,10 @@
       </md-list>
       <md-list>
         <md-list-item>
+          <div><h1>Table #</h1></div>
+          <div class="md-secondary">{{ $ctrl._currentTable.tableNumber }}</div>
+        </md-list-item>
+        <md-list-item>
           <div><h1>Total:</h1></div>
           <div class="md-secondary"> {{ $ctrl.total() | currency:"Rs. " }} </div>
         </md-list-item>
@@ -43,7 +65,7 @@
         </md-list-item>
       </md-list>
       <md-toolbar>
-        <div class="md-toolbar-tools" ng-if="$ctrl._showPaymentTypes">
+        <div class="md-toolbar-tools" ng-if="$ctrl._showPaymentTypes" ng-hide="$ctrl._enableAgain">
           <md-button class="md-raised md-primary"
             ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">
             Card
@@ -57,10 +79,20 @@
           <md-button class="md-raised md-hue"
             ng-disabled="$ctrl.order().length < 1"
             ng-click="$ctrl.showPaymentTypes()">Finalize</md-button>
+          <md-button class="md-raised md-hue" ng-disabled="($ctrl.order().length < 1) || (!$ctrl._currentTable)" ng-click="$ctrl.serve()">Serve</md-button>
           <md-button class="md-raised md-accent" ng-click="$ctrl.abort()">Cancel</md-button>
-          <md-button class="md-raised" ng-click="$ctrl.hold()" ng-disabled="!$ctrl.total()">Hold</md-button>
+          <md-button class="md-raised md-hue" ng-click="$ctrl.hold()" ng-disabled="!$ctrl.total()">Hold</md-button>
         </div>
       </md-toolbar>
+    </div>
+    <div layout="row" layout-align="center center" ng-show="$ctrl._serves.length">
+      <h1>Currently Serving</h1>
+    </div>
+    <md-divider ng-show="$ctrl._serves.length"></md-divider>
+    <div layout="row" class="wrap">
+      <div ng-repeat="serve in $ctrl._serves">
+        <md-button class="md-secondary md-fab md-primary md-mini" ng-click="$ctrl.closeServe(serve)">{{ serve.tableNumber }}</md-button>
+      </div>
     </div>
   </div>
 </md-content>

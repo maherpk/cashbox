@@ -15,6 +15,7 @@ import Transaction from './scripts/services/transaction';
 
 // importing filters
 import itemName from './scripts/filters/itemName';
+import itemPrice from './scripts/filters/itemPrice';
 
 // importing components;
 import OrderComponent from './scripts/components/order/order';
@@ -26,6 +27,7 @@ let app = angular.module('register', [
 ])
   .config(Router)
   .filter('itemName', itemName)
+  .filter('itemPrice', itemPrice)
   .service('Shift', Shift)
   .service('Category', Category)
   .service('Item', Item)

@@ -24,6 +24,25 @@ Meteor.methods({
   },
   '/orm/shifts/': () => {
     return Shifts.select('*').run();
-  }
+  },
+  '/orm/shifts/check-printer/': () => {
+    let resp = {
+      status: false,
+    }
+    try {
+      let device = new Escpos.USB();
+      let printer = new Escpos.Printer(device);
 
+      if(printer) {
+        resp.status = true;
+        object = printer;
+      }
+
+      return resp
+    } catch (err) {
+      resp.object = err;
+      
+      return resp
+    }
+  }
 });
