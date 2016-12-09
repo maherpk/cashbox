@@ -23,7 +23,6 @@ autopublish@1.0.7             # Publish all data to the clients (for prototyping
 insecure@1.0.7                # Allow all DB writes from clients (for prototyping)
 angular-templates
 fourseven:scss
-# arboleya:electrify
 
 session@1.1.7
 logging@1.1.16
@@ -35,3 +34,6 @@ check@1.2.4
 
 simple:pg
 local:escpos
+omega:meteor-desktop-watcher@=0.2.3
+omega:meteor-desktop-bundler@=0.2.3
+omega:meteor-desktop-localstorage@=0.0.11

@@ -2,7 +2,8 @@
   "name": "register",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run",
+    "desktop": "meteor-desktop"
   },
   "dependencies": {
     "angular": "^1.5.8",
@@ -15,5 +16,8 @@
     "bourbon": "^4.2.7",
     "externalify": "^0.1.0",
     "lodash": "^4.16.6"
+  },
+  "devDependencies": {
+    "meteor-desktop": "^0.2.3"
   }
 }
