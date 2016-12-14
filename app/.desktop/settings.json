@@ -15,7 +15,8 @@
         "icon": "@assets/meteor.png",
         "_windows": {
             "icon": "@assets/meteor.ico"
-        }
+        },
+        "kiosk": true
     },
     "windowDev": {
     },
@@ -38,8 +39,8 @@
     },
     "builderOptions": {
         "win": {
-            "title": "Cash Box",
-            "authors": "Me, Myself And I",
+            "title": "CashBox",
+            "authors": "Maher, Pakistan",
             "target": "squirrel"
         },
         "squirrelWindows": {
@@ -48,7 +49,7 @@
         },
         "icon": ".desktop/assets/meteor.ico",
         "appId": "meteor.app",
-        "productName": "Cash Box",
+        "productName": "CashBox",
         "compression": "maximum",
         "mac": {
             "icon": ".desktop/assets/meteor.icns"
@@ -72,8 +73,8 @@
             "icon": ".desktop/assets/meteor.icns"
         },
         "version-string": {
-            "CompanyName": "Maher Inc.",
-            "LegalCopyright": "Copyright 2016 My Company - All rights reserved.",
+            "CompanyName": "Maher, Pakistan",
+            "LegalCopyright": "Copyright 2016 Maher, Pakistan - All rights reserved.",
             "FileDescription": "CashBox",
             "OriginalFilename": "CashBox.exe",
             "FileVersion": "@version",

@@ -52,9 +52,9 @@ mongo@1.1.14
 mongo-id@1.0.6
 npm-mongo@2.2.11_2
 observe-sequence@1.0.14
-omega:meteor-desktop-bundler@0.2.5
+omega:meteor-desktop-bundler@0.2.3
 omega:meteor-desktop-localstorage@0.0.11
-omega:meteor-desktop-watcher@0.2.5
+omega:meteor-desktop-watcher@0.2.3
 ordered-dict@1.0.9
 promise@0.8.8
 random@1.0.10
