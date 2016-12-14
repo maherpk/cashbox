@@ -1,0 +1,4 @@
+{
+  "POSTGRESQL_URL": "postgres://127.0.0.1/mahercash",
+  "MONGO_URL": "nope"
+}

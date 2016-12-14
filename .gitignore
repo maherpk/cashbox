@@ -53,7 +53,7 @@ jspm_packages
 .meteor/local
 
 # meteor settings file
-settings.json
+/settings.json
 
 # meteor build output files
 *.tar.gz
