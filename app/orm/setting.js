@@ -7,3 +7,12 @@ Meteor.methods({
 		}).run()[0];
 	}
 });
+
+
+Meteor.methods({
+	'/orm/setting/tables/': () => {
+		return Setting.select('*').where({
+			key: 'Tables'
+		}).run()[0];
+	}
+});

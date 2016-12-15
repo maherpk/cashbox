@@ -96,4 +96,13 @@ export default class Shift {
     });
     return defer.promise;
   }
+
+  getTables() {
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/setting/tables/', (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
 }

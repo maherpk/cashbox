@@ -17,7 +17,6 @@ export default class OrderCtrl {
     this._shift = false;
     this._showPaymentTypes = false;
     this._enableAgain = false;
-    this._numbers = 10;
     this._tables = [];
     this._currentTable = null;
     this._serves = [];
@@ -34,13 +33,17 @@ export default class OrderCtrl {
     ITEM.get(this).all().then((data) => {
       this._items = data;
     });
-    this._hideOrderBox = false;
 
-    for(var i=0; i<this._numbers; i++) {
-      let table = _.clone(this._blankTable);
-      table.tableNumber = i+1;
-      this._tables.push(table);
-    }
+    SHIFT.get(this).getTables().then((data) => {
+      this._numbers = data.value;
+      for(var i=0; i<this._numbers; i++) {
+        let table = _.clone(this._blankTable);
+        table.tableNumber = i+1;
+        this._tables.push(table);
+      }
+    });
+
+    this._hideOrderBox = false;
   }
 
   getShift () {
