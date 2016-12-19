@@ -141,6 +141,9 @@ export default class OrderCtrl {
   }
 
   setTable(table) {
+    if(this._currentTable) {
+      this._currentTable.occupied = false;
+    }
     this._currentTable = table;
     table.occupied = true;
   }
