@@ -1,6 +1,6 @@
 module.exports = {
   client: 'pg',
-  connection: 'postgres://127.0.0.1/mahercash'
+  connection: 'postgres://maher:alpha101@127.0.0.1/mahercash'
 };
 
 // // Update with your config settings.
