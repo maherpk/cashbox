@@ -18,7 +18,7 @@
     <md-divider></md-divider>
     <div layout="row" class="wrap">
       <div ng-repeat="table in $ctrl._tables">
-        <md-button class="md-secondary md-fab md-warn md-mini md-hue-2" ng-hide="table.occupied" ng-click="$ctrl.setTable(table)">{{ table.tableNumber }}</md-button>
+        <md-button class="md-secondary md-fab md-warn md-hue-2" ng-hide="table.occupied" ng-click="$ctrl.setTable(table)">{{ table.tableNumber }}</md-button>
       </div>
     </div>
     <div layout="row" layout-align="center center" ng-show="$ctrl._hold.length">
@@ -91,7 +91,7 @@
     <md-divider ng-show="$ctrl._serves.length"></md-divider>
     <div layout="row" class="wrap">
       <div ng-repeat="serve in $ctrl._serves">
-        <md-button class="md-secondary md-fab md-primary md-mini" ng-click="$ctrl.closeServe(serve)">{{ serve.tableNumber }}</md-button>
+        <md-button class="md-secondary md-fab md-primary" ng-click="$ctrl.closeServe(serve)">{{ serve.tableNumber }}</md-button>
       </div>
     </div>
   </div>
