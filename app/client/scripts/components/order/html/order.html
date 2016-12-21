@@ -78,7 +78,7 @@
         <div class="md-toolbar-tools" ng-if="!$ctrl._showPaymentTypes">
           <md-button class="md-raised md-hue"
             ng-disabled="$ctrl.order().length < 1"
-            ng-click="$ctrl.showPaymentTypes()">Finalize</md-button>
+            ng-click="$ctrl.showPaymentTypes({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">Finalize</md-button>
           <md-button class="md-raised md-hue" ng-disabled="($ctrl.order().length < 1) || (!$ctrl._currentTable)" ng-click="$ctrl.serve()">Serve</md-button>
           <md-button class="md-raised md-accent" ng-click="$ctrl.abort()">Cancel</md-button>
           <md-button class="md-raised md-hue" ng-click="$ctrl.hold()" ng-disabled="!$ctrl.total()">Hold</md-button>

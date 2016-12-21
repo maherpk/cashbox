@@ -155,4 +155,20 @@ export default class Order {
     this._order = _.clone(order);
   }
 
+  kitchenPrint(table) {
+    let obj = {};
+    let order = _.clone(this._order);
+    this._orderedItems = [];
+    _.forEach(order, (singleton) => {
+      let item = _.clone(this._blankItem);
+      item.Quantity = singleton.quantity;
+      item.Name = this.$filter('itemName')(singleton.item_id, this._items);
+      this._orderedItems.push(item);
+    });
+    obj.items = this._orderedItems;
+    obj.table = table.tableNumber;
+    TRANSACTION.get(this).kitchen(obj);
+    console.log(this._orderedItems);
+  }
+
 }

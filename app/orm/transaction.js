@@ -50,7 +50,9 @@ Meteor.methods({
           .text('='.repeat(48))
         _.forEach(obj.ITEMS, (item) => {
           let string = item.Quantity + " ".repeat(4 - String(item.Quantity).length) + item.Name + ' '.repeat(5 - String(item.Price).length) + item.Price + '.00';
-          let spaced = item.Name + " ".repeat(48 - string.length) + " ".repeat(3 - String(item.Quantity).length) + item.Quantity + " ".repeat(5 - String(item.Price).length) + item.Price + '.00';
+          let length = string.length;
+          if(length > 48) { length = 48 };
+          let spaced = item.Name + " ".repeat(48 - length) + " ".repeat(3 - String(item.Quantity).length) + item.Quantity + " ".repeat(5 - String(item.Price).length) + item.Price + '.00';
           subTotal += parseInt(item.Price);
           printer
             .align('ct')
@@ -89,5 +91,50 @@ Meteor.methods({
       resp.message = 'Check if Printer is connected and turned On.';
       return resp;
     }
+  },
+  '/orm/transactions/kitchen/': (data) => {
+    let device = new Escpos.USB();
+    let printer = new Escpos.Printer(device);
+    let time = new Date();
+    let obj = {};
+    let subTotal = 0;
+    obj.DATE = time;
+    obj.ITEMS = data.items;
+    obj.Table = data.table;
+    device.open(function() {
+      printer
+        .font('a')
+        .align('ct')
+        .style('bu')
+        .size(2, 2)
+        .text('Order List')
+        .size(3, 3)
+        .text(obj.DATE)
+        .size(2, 2)
+        .text('Table #')
+        .size(3, 3)
+        .text(obj.Table)
+        .font('b')
+        .style('normal')
+        .text('_'.repeat(48))
+        .size(1, 1)
+      let head = 'NAME' +' '.repeat(4) + 'QTY' + ' '.repeat(4);
+      printer
+        .text('NAME' + ' '.repeat(48 - head.length) + 'QTY')
+        .text('='.repeat(48))
+        _.forEach(obj.ITEMS, (item) => {
+          let string = item.Quantity + " ".repeat(4 - String(item.Quantity).length) + item.Name;
+          let spaced = item.Name + " ".repeat(48 - string.length) + " ".repeat(3 - String(item.Quantity).length) + item.Quantity;
+          printer
+            .align('ct')
+            .text(spaced)
+        });
+      printer
+        .text('')
+        .text('')
+        .text('')
+        .text('')
+        .cut()
+    });
   }
 });

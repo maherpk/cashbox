@@ -64,4 +64,15 @@ export default class Transaction {
 
     return defer.promise;
   }
+
+  kitchen(data) {
+    let defer = Q.get(this).defer();
+
+    Meteor.call('/orm/transactions/kitchen/', data, (error, result) =>{
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+
+    return defer.promise;
+  }
 }
