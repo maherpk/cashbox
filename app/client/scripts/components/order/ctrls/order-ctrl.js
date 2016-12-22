@@ -93,7 +93,7 @@ export default class OrderCtrl {
     if(angular.isUndefined(flag)) {
       props = (props) ? {properties: props} : false;
     }
-    ORDER.get(this).print(props);
+    //ORDER.get(this).print(props);
     ORDER.get(this).reset();
     LOCATION.get(this).path('/');
     // .then(r => {
@@ -111,7 +111,10 @@ export default class OrderCtrl {
     LOCATION.get(this).path('/summary/');
   }
 
-  showPaymentTypes () {
+  showPaymentTypes (props) {
+    console.log(props);
+    props = (props) ? {properties: props} : false;
+    ORDER.get(this).print(props);
     this._showPaymentTypes = !this._showPaymentTypes;
   }
 
@@ -149,6 +152,7 @@ export default class OrderCtrl {
   }
 
   serve() {
+    ORDER.get(this).kitchenPrint(this._currentTable);
     this._currentTable.order = ORDER.get(this).serve();
     this._serves.push(this._currentTable);
     this._currentTable = null;
