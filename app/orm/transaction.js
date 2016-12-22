@@ -31,8 +31,14 @@ Meteor.methods({
       obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2)
       obj.Total = parseFloat(data.trans.properties.total).toFixed(2)
 
+      Escpos.Image.load('http://localhost:3000/imgs/logo.png', function(image){
+
       device.open(function() {
         printer
+          .align('ct')
+          .raster(image)
+          .text('')
+          .text('')
           .font('a')
           .align('ct')
           .style('bu')
@@ -84,6 +90,7 @@ Meteor.methods({
           resp.message = 'success';
           return resp;
       });
+    });
     } catch (err) {
       console.log(err);
       resp.status = false;
