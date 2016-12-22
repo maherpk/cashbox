@@ -20,6 +20,7 @@ export default class OrderCtrl {
     this._tables = [];
     this._currentTable = null;
     this._serves = [];
+    this._bills = [];
     this._blankTable = {
       tableNumber: null,
       order: {},
@@ -112,9 +113,6 @@ export default class OrderCtrl {
   }
 
   showPaymentTypes (props) {
-    console.log(props);
-    props = (props) ? {properties: props} : false;
-    ORDER.get(this).print(props);
     this._showPaymentTypes = !this._showPaymentTypes;
   }
 
@@ -137,6 +135,9 @@ export default class OrderCtrl {
 
   hold () {
     this._hold = ORDER.get(this).hold();
+    if(this._showPaymentTypes) {
+      this._showPaymentTypes = !this._showPaymentTypes;
+    }
   }
 
   unhold(order) {
@@ -161,6 +162,16 @@ export default class OrderCtrl {
   closeServe(serve) {
     ORDER.get(this).closeServe(serve.order);
     this._currentTable = serve;
+  }
+
+  qBills(props) {
+    this._bills.push(props);
+    this.hold();
+  }
+
+  print(props) {
+    props = (props) ? {properties: props} : false;
+    ORDER.get(this).print(props);
   }
 
   // methods
