@@ -88,9 +88,11 @@ export default class OrderCtrl {
       this._serves.splice(ser, 1);
       this._currentTable = null;
     }
+    this._showCashIn = false;
   }
 
   print (props, flag) {
+    console
     if(angular.isUndefined(flag)) {
       props = (props) ? {properties: props} : false;
     }
@@ -169,9 +171,13 @@ export default class OrderCtrl {
     this.hold();
   }
 
-  print(props) {
+  printAgain(props) {
     props = (props) ? {properties: props} : false;
     ORDER.get(this).print(props);
+  }
+
+  cashIn(props) {
+    this._showCashIn = true;
   }
 
   // methods
