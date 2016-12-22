@@ -67,7 +67,7 @@
           <md-input-container flex>
             <label>Amount Recieved</label>
             <input type="text" pattern="\d*" name="cashIn" ng-model="cashRec">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: cashRec , balance: cashRec - ($ctrl.total()+$ctrl.tax()) })">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: cashRec , balance: cashRec - ($ctrl.total()+$ctrl.tax()) }); cashRec=0">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
