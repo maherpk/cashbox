@@ -89,6 +89,7 @@ export default class OrderCtrl {
       this._currentTable = null;
     }
     this._showCashIn = false;
+    this.cashRec = 0;
   }
 
   print (props, flag) {
