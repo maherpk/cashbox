@@ -76,6 +76,15 @@
             </md-button>
           </md-input-container>
         </md-list-item>
+        <md-list-item ng-show="$ctrl._showCardIn">
+          <md-input-container flex>
+          <label>Reciept No.</label>
+            <input type="text" name="cardRec" ng-model="cardRecp">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: cardRecp, discount: $ctrl.discount() })" ng-disabled="!cardRecp || cardRecp.length<3">
+              <md-icon md-svg-src="\imgs\check.svg"></md-icon>
+            </md-button>
+          </md-input-container>
+        </md-list-item>
         <md-list-item ng-show="$ctrl._showCashIn">
           <div><h1>Balance:</h1></div>
           <div class="md-secondary">{{  cashRec - ($ctrl.total()+$ctrl.tax()) | currency:"Rs. "}}</div>
@@ -84,7 +93,7 @@
       <md-toolbar>
         <div class="md-toolbar-tools" ng-if="$ctrl._showPaymentTypes" ng-hide="$ctrl._enableAgain">
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount() })">
+            ng-click="$ctrl.cardIn()">
             Card
           </md-button>
           <md-button class="md-raised md-primary"

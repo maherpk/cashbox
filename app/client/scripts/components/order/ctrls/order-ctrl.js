@@ -17,6 +17,8 @@ export default class OrderCtrl {
     this._shift = false;
     this._showPaymentTypes = false;
     this._enableAgain = false;
+    this._showCashIn = false;
+    this._showCardIn = false;
     this._tables = [];
     this._currentTable = null;
     this._serves = [];
@@ -94,6 +96,7 @@ export default class OrderCtrl {
     }
     this._showCashIn = false;
     this.cashRec = 0;
+    this._showCardIn = false;
   }
 
   print (props, flag) {
@@ -132,6 +135,8 @@ export default class OrderCtrl {
       this._serves.splice(ser, 1);
       this._currentTable = null;
     }
+    this._showCashIn = false;
+    this._showCardIn = false;
     ORDER.get(this).reset();
     LOCATION.get(this).path('/');
   }
@@ -183,6 +188,10 @@ export default class OrderCtrl {
 
   cashIn(props) {
     this._showCashIn = true;
+  }
+
+  cardIn() {
+    this._showCardIn = true;
   }
 
   // methods
