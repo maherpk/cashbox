@@ -87,7 +87,7 @@
         </md-list-item>
         <md-list-item ng-show="$ctrl._showCashIn">
           <div><h1>Balance:</h1></div>
-          <div class="md-secondary">{{  cashRec - ($ctrl.total()+$ctrl.tax()) | currency:"Rs. "}}</div>
+          <div class="md-secondary">{{  cashRec - ($ctrl.total()+$ctrl.tax()-$ctrl.discount()) | currency:"Rs. "}}</div>
         </md-list-item>
       </md-list>
       <md-toolbar>
