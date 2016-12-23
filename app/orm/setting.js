@@ -16,3 +16,10 @@ Meteor.methods({
 		}).run()[0];
 	}
 });
+
+
+Meteor.methods({'/orm/setting/discount/': () => {
+	return Setting.select('*').where({
+		key: 'Discount'
+	}).run()[0];
+}});

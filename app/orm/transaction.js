@@ -29,6 +29,7 @@ Meteor.methods({
       obj.DATE = time;
       obj.ITEMS = data.items;
       obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2)
+      obj.Discount = parseFloat(data.trans.properties.discount).toFixed(2)
       obj.Total = parseFloat(data.trans.properties.total).toFixed(2)
 
       Escpos.Image.load('http://localhost:3000/imgs/logo.png', function(image){
@@ -75,6 +76,10 @@ Meteor.methods({
         let sTSpaced = 'Sales Tax' + " ".repeat(48 - sT.length) + obj.SalesTax;
         printer
           .text(sTSpaced)
+        let dT = 'Discount 20%' + obj.Discount;
+        let dTSpaced = 'Discount 20%' + " ".repeat(48 - dT.length) + obj.Discount;
+        printer
+          .text(dTSpaced)
           .size(2, 2)
           .control('LF')
         let tO = 'Total' + obj.Total;
