@@ -30,7 +30,7 @@ Meteor.methods({
       obj.ITEMS = data.items;
       obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2)
       obj.Discount = parseFloat(data.trans.properties.discount).toFixed(2)
-      obj.Total = parseFloat(data.trans.properties.total).toFixed(2)
+      obj.Total = (parseFloat(data.trans.properties.total) - parseFloat(data.trans.properties.discount)).toFixed(2)
 
       Escpos.Image.load('http://localhost:3000/imgs/logo.png', function(image){
 
