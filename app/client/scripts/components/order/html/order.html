@@ -70,8 +70,8 @@
         <md-list-item ng-show="$ctrl._showCashIn">
           <md-input-container flex>
             <label>Amount Recieved</label>
-            <input type="text" pattern="\d*" name="cashIn" ng-model="cashRec">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: cashRec , balance: cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount() })" ng-disabled="!cashRec || cashRec<1">
+            <input type="text" pattern="\d*" name="cashIn" ng-model="$ctrl.cashRec">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: $ctrl.cashRec , balance: $ctrl.cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount() })" ng-disabled="!$ctrl.cashRec || $ctrl.cashRec<1">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
@@ -79,15 +79,15 @@
         <md-list-item ng-show="$ctrl._showCardIn">
           <md-input-container flex>
           <label>Reciept No.</label>
-            <input type="text" name="cardRec" ng-model="cardRecp">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: cardRecp, discount: $ctrl.discount() })" ng-disabled="!cardRecp || cardRecp.length<3">
+            <input type="text" name="cardRec" ng-model="$ctrl.cardRecp">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: $ctrl.cardRecp })" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
         </md-list-item>
         <md-list-item ng-show="$ctrl._showCashIn">
           <div><h1>Balance:</h1></div>
-          <div class="md-secondary">{{  cashRec - $ctrl.calculate() | currency:"Rs. "}}</div>
+          <div class="md-secondary">{{  $ctrl.cashRec - $ctrl.calculate() | currency:"Rs. "}}</div>
         </md-list-item>
       </md-list>
       <md-toolbar>

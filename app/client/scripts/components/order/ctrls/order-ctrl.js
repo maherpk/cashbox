@@ -97,6 +97,8 @@ export default class OrderCtrl {
     this._showCashIn = false;
     this.cashRec = 0;
     this._showCardIn = false;
+    this.cashRec = null;
+    this.cardRecp = null;
   }
 
   print (props, flag) {
