@@ -65,22 +65,13 @@
         <md-divider ></md-divider>
         <md-list-item>
           <div><h1>Grand Total:</h1></div>
-          <div class="md-secondary"> {{ ($ctrl.tax() +  $ctrl.total()) - $ctrl.discount() | currency:"Rs. " }}</div>
+          <div class="md-secondary"> {{ $ctrl.calculate() | currency:"Rs. " }}</div>
         </md-list-item>
         <md-list-item ng-show="$ctrl._showCashIn">
           <md-input-container flex>
             <label>Amount Recieved</label>
             <input type="text" pattern="\d*" name="cashIn" ng-model="cashRec">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: cashRec , balance: cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount() })">
-              <md-icon md-svg-src="\imgs\check.svg"></md-icon>
-            </md-button>
-          </md-input-container>
-        </md-list-item>
-        <md-list-item ng-show="$ctrl._showCardIn">
-          <md-input-container flex>
-          <label>Reciept No.</label>
-            <input type="text" name="cardRec" ng-model="cardRecp">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: cardRecp })" ng-disabled="!cardRecp || cardRecp.length<3">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: cashRec , balance: cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount() })" ng-disabled="!cashRec || cashRec<1">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
@@ -96,7 +87,7 @@
         </md-list-item>
         <md-list-item ng-show="$ctrl._showCashIn">
           <div><h1>Balance:</h1></div>
-          <div class="md-secondary">{{  cashRec - ($ctrl.total()+$ctrl.tax()-$ctrl.discount()) | currency:"Rs. "}}</div>
+          <div class="md-secondary">{{  cashRec - $ctrl.calculate() | currency:"Rs. "}}</div>
         </md-list-item>
       </md-list>
       <md-toolbar>

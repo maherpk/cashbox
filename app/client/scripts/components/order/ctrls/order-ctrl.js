@@ -193,5 +193,12 @@ export default class OrderCtrl {
     this._showCardIn = true;
   }
 
+  calculate() {
+    let amount = 0;
+    amount = (this.total() + this.tax()) - this.discount();
+    console.log(amount);
+    return Math.round(amount);
+  }
+
   // methods
 }
