@@ -82,8 +82,8 @@ Meteor.methods({
           .text(dTSpaced)
           .size(2, 2)
           .control('LF')
-        let tO = 'Total' + obj.Total;
-        let tOSpaced = 'Total' + " ".repeat(48 - tO.length) + obj.Total;
+        let tO = 'Total' + Math.round(obj.Total);
+        let tOSpaced = 'Total' + " ".repeat(48 - tO.length) + Math.round(obj.Total);
         printer
           .text(tOSpaced)
           .text('')
