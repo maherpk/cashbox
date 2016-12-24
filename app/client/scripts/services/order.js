@@ -12,6 +12,7 @@ export default class Order {
     this._order = [];
     this._hold = [];
     this._salesTax = 0;
+    this._discount = 0;
     this._currentTransaction = 0;
     this.$filter = $filter;
     this._items = [];
@@ -80,6 +81,18 @@ export default class Order {
 
     let taxed = (parseInt(this._salesTax) / 100) * parseInt(amount)
     return taxed;
+  }
+
+  getDiscount (amount) {
+    if(this._discount == 0) {
+        TRANSACTION.get(this).getDiscount().then(data => {
+        this._discount = parseInt(data.value);
+      });
+    }
+    
+
+    let discounted = (parseInt(this._discount) / 100) * parseInt(amount)
+    return discounted;
   }
 
   save (obj) {

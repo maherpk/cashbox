@@ -57,38 +57,42 @@
           <div><h1>Sales Tax:</h1></div>
           <div class="md-secondary"> {{ $ctrl.tax() | currency:"Rs. " }} </div>
         </md-list-item>
+        <md-list-item>
+          <div><h1>Discount:</h1></div>
+          <div class="md-secondary"> {{ $ctrl.discount() | currency: "Rs. "}}</div>
+        </md-list-item>
         <md-divider ></md-divider>
         <md-divider ></md-divider>
         <md-list-item>
           <div><h1>Grand Total:</h1></div>
-          <div class="md-secondary"> {{ $ctrl.tax() +  $ctrl.total() | currency:"Rs. " }} </div>
+          <div class="md-secondary"> {{ ($ctrl.tax() +  $ctrl.total()) - $ctrl.discount() | currency:"Rs. " }}</div>
         </md-list-item>
         <md-list-item ng-show="$ctrl._showCashIn">
           <md-input-container flex>
             <label>Amount Recieved</label>
             <input type="text" pattern="\d*" name="cashIn" ng-model="cashRec">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: cashRec , balance: cashRec - ($ctrl.total()+$ctrl.tax()) })" ng-disabled="cashRec<1 || !cashRec || cashRec<$ctrl.total()">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: cashRec , balance: cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount() })">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
         </md-list-item>
         <md-list-item ng-show="$ctrl._showCashIn">
           <div><h1>Balance:</h1></div>
-          <div class="md-secondary">{{  cashRec - ($ctrl.total()+$ctrl.tax()) | currency:"Rs. "}}</div>
+          <div class="md-secondary">{{  cashRec - ($ctrl.total()+$ctrl.tax()-$ctrl.discount()) | currency:"Rs. "}}</div>
         </md-list-item>
       </md-list>
       <md-toolbar>
         <div class="md-toolbar-tools" ng-if="$ctrl._showPaymentTypes" ng-hide="$ctrl._enableAgain">
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">
+            ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount() })">
             Card
           </md-button>
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.cashIn({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">
+            ng-click="$ctrl.cashIn({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount() })">
             Cash
           </md-button>
-          <md-button class="md-raised" ng-click="$ctrl.printAgain({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })" >Print</md-button>
-          <md-button class="md-raised md-accent" ng-click="$ctrl.qBills({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax() })">Hold</md-button>
+          <md-button class="md-raised" ng-click="$ctrl.printAgain({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount() })" >Print</md-button>
+          <md-button class="md-raised md-accent" ng-click="$ctrl.qBills({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount() })">Hold</md-button>
         </div>
         <div class="md-toolbar-tools" ng-if="!$ctrl._showPaymentTypes">
           <md-button class="md-raised md-hue"

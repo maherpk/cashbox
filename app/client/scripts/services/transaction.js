@@ -75,4 +75,15 @@ export default class Transaction {
 
     return defer.promise;
   }
+
+  getDiscount() {
+    let defer = Q.get(this).defer();
+
+    Meteor.call('/orm/setting/discount/', (error, result) =>{
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+
+    return defer.promise;
+  }
 }
