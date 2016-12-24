@@ -68,4 +68,13 @@ export default class ShiftSummaryCtrl {
   cancel() {
     LOCATION.get(this).path('/');
   }
+
+  generateSlip() {
+    let data = {};
+    data.cash = this._totalCash;
+    data.card = this._totalCard;
+    SHIFT.get(this).printSummary(data).then(r => {
+      console.log(r);
+    });
+  }
 }

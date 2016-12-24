@@ -105,4 +105,13 @@ export default class Shift {
     });
     return defer.promise;
   }
+
+  printSummary(data) {
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/shifts/print-summary/', data, (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
 }
