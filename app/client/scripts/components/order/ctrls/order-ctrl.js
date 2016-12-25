@@ -28,6 +28,7 @@ export default class OrderCtrl {
       order: {},
       occupied: false
     }
+    this._people = 0;
 
     this._init();
   }
@@ -77,8 +78,12 @@ export default class OrderCtrl {
     return ORDER.get(this).getDiscount(this.total() + this.tax());
   }
 
-  checkout () {
+  peopleUp () {
+    this._people++;
+  }
 
+  peopleDown () {
+    this._people--;
   }
 
   save (props) {
@@ -199,7 +204,6 @@ export default class OrderCtrl {
   calculate() {
     let amount = 0;
     amount = (this.total() + this.tax()) - this.discount();
-    console.log(amount);
     return Math.round(amount);
   }
 

@@ -44,6 +44,15 @@
           <md-button class="md-secondary md-fab md-primary md-mini" ng-click="$ctrl.increment(item.item_id)">+</md-button>
         </md-list-item>
       </md-list>
+      <md-list class="md-dense">
+        <md-list-item class="secondary-button-padding">
+          <h2>No. of Serving People</h2>
+          <md-button class="md-secondary md-fab md-accent md-mini" ng-click="$ctrl.peopleDown()" ng-disabled="$ctrl._people<1">-</md-button>
+          <div class="md-secondary"><h1>{{ $ctrl._people }}</h1></div>
+          <md-button class="md-secondary md-fab md-primary md-mini" ng-click="$ctrl.peopleUp()">+</md-button>
+        </md-list-item>
+      </md-list>
+      <md-divider ></md-divider>
       <md-list>
         <md-list-item>
           <div><h1>Table #</h1></div>
@@ -71,7 +80,7 @@
           <md-input-container flex>
             <label>Amount Recieved</label>
             <input type="text" pattern="\d*" name="cashIn" ng-model="$ctrl.cashRec">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: $ctrl.cashRec , balance: $ctrl.cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount() })" ng-disabled="!$ctrl.cashRec || $ctrl.cashRec<1">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: $ctrl.cashRec , balance: $ctrl.cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount(), people: $ctrl.peopleServing })" ng-disabled="!$ctrl.cashRec || $ctrl.cashRec<1">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
@@ -80,7 +89,7 @@
           <md-input-container flex>
           <label>Reciept No.</label>
             <input type="text" name="cardRec" ng-model="$ctrl.cardRecp">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: $ctrl.cardRecp, discount: $ctrl.discount() })" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: $ctrl.cardRecp, discount: $ctrl.discount(), people: $ctrl.peopleServing })" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
@@ -97,11 +106,11 @@
             Card
           </md-button>
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.cashIn({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount() })">
+            ng-click="$ctrl.cashIn({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl.peopleServing })">
             Cash
           </md-button>
-          <md-button class="md-raised" ng-click="$ctrl.printAgain({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount() })" >Print</md-button>
-          <md-button class="md-raised md-accent" ng-click="$ctrl.qBills({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount() })">Hold</md-button>
+          <md-button class="md-raised" ng-click="$ctrl.printAgain({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl.peopleServing })" >Print</md-button>
+          <md-button class="md-raised md-accent" ng-click="$ctrl.qBills({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl.peopleServing })">Hold</md-button>
         </div>
         <div class="md-toolbar-tools" ng-if="!$ctrl._showPaymentTypes">
           <md-button class="md-raised md-hue"
