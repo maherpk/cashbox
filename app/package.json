@@ -18,6 +18,7 @@
     "lodash": "^4.16.6"
   },
   "devDependencies": {
+    "babel-plugin-angularjs-annotate": "^0.6.0",
     "meteor-desktop": "^0.2.3"
   }
 }
