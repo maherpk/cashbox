@@ -1,4 +1,10 @@
 import _ from 'lodash';
+import jsonExport from 'jsonexport';
+import mailgun from 'mailgun-js';
+let MG = mailgun({
+  apiKey: 'key-91d80031ad7a2f1133fd3fbdee7c55d5',
+  domain: 'doubledip.com'
+});
 
 let Transaction = new PG.Table('transactions');
 
@@ -20,6 +26,29 @@ Meteor.methods({
   },
 
   '/orm/transactions/print/': (data) => {
+
+    jsonExport(data.items, (err, s) => {
+      console.log(s);
+      let bfr = Buffer.from(s, 'utf-8');
+
+      let emailData = {
+        from: 'Mocca Emporium <noreply@doubledip.com>',
+        to: 'yousuf@maher.pk',
+        subject: 'Hello',
+        text: 'Testing some Mailgun awesomness!',
+        attachment: bfr
+      };
+      MG.messages().send(emailData, (err, s) => {
+        console.log(err);
+        console.log(s);
+      });
+    });    
+    
+    // MG.messages().send(emailData, (s, e) => {
+    //   console.log(s);
+    //   console.log(e);
+    // });
+    
     let resp = {};
     try {
       let device = new Escpos.USB();
