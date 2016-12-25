@@ -80,7 +80,7 @@
           <md-input-container flex>
           <label>Reciept No.</label>
             <input type="text" name="cardRec" ng-model="$ctrl.cardRecp">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: $ctrl.cardRecp })" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: $ctrl.cardRecp, discount: $ctrl.discount() })" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
