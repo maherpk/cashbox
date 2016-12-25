@@ -136,6 +136,32 @@ export default class Order {
    return defer.promise;
   }
 
+  duplicatePrint(transaction) {
+    let defer = Q.get(this).defer();
+    this._renderTransaction.trans = transaction;
+    let order = _.clone(this._order);
+      this._renderdItems = [];
+    _.forEach(order, (singleton) => {
+      let item = _.clone(this._blankItem);
+      item.Quantity = singleton.quantity;
+      item.Name = this.$filter('itemName')(singleton.item_id, this._items);
+      item.Price = this.$filter('itemPrice')(singleton.item_id, this._items) * singleton.quantity;
+      this._renderdItems.push(item);
+    });
+
+    this._renderTransaction.items = _.clone(this._renderdItems);
+    
+    TRANSACTION.get(this).duplicatePrint(this._renderTransaction).then(resp => {
+      if(resp.status != true) {
+        defer.resolve(resp.message);
+      } else {
+        defer.reject(true);
+      }
+    });
+    
+   return defer.promise;
+  }
+
   reset () {
     this._order = _.clone(this._defaultOrder);
   }
