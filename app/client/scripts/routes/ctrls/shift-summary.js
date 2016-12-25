@@ -101,12 +101,17 @@ export default class ShiftSummaryCtrl {
   }
 
   itemNames (array) {
+    console.log(array);
     let namedItems = [];
     namedItems = _.map(array, (value) => {
       let idx = _.findIndex(this._items, {id: parseInt(value.item_id)});
-      let name = (idx > -1) ? this._items[idx].name : '';
-      return name;
+      value.name = (idx > -1) ? this._items[idx].name : '';
+      value.unitPrice = (idx > -1) ? this._items[idx].price : '';
+      value.quantity = parseInt(value.quantity);
+      return value;
     });
+
+    console.log(namedItems);
 
     let a = namedItems.reduce(function (acc, curr) {
       if (typeof acc[curr] == 'undefined') {

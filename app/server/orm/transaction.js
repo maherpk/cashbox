@@ -27,22 +27,22 @@ Meteor.methods({
 
   '/orm/transactions/print/': (data) => {
 
-    jsonExport(data.items, (err, s) => {
-      console.log(s);
-      let bfr = Buffer.from(s, 'utf-8');
+    // jsonExport(data.items, (err, s) => {
+    //   console.log(s);
+    //   let bfr = Buffer.from(s, 'utf-8');
 
-      let emailData = {
-        from: 'Mocca Emporium <noreply@doubledip.com>',
-        to: 'yousuf@maher.pk',
-        subject: 'Hello',
-        text: 'Testing some Mailgun awesomness!',
-        attachment: bfr
-      };
-      MG.messages().send(emailData, (err, s) => {
-        console.log(err);
-        console.log(s);
-      });
-    });    
+    //   let emailData = {
+    //     from: 'Mocca Emporium <noreply@doubledip.com>',
+    //     to: 'yousuf@maher.pk',
+    //     subject: 'Hello',
+    //     text: 'Testing some Mailgun awesomness!',
+    //     attachment: bfr
+    //   };
+    //   MG.messages().send(emailData, (err, s) => {
+    //     console.log(err);
+    //     console.log(s);
+    //   });
+    // });    
     
     // MG.messages().send(emailData, (s, e) => {
     //   console.log(s);
