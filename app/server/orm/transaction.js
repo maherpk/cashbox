@@ -270,5 +270,9 @@ Meteor.methods({
         .text('')
         .cut()
     });
+  },
+
+  '/orm/transactions/in-shift-all/': (params) => {
+    return Transaction.select('id').where(params).run();
   }
 });

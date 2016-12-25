@@ -69,10 +69,6 @@ export default class Shift {
 
   allTransactions (shift) {
     shift = (shift) ? shift : this.current();
-    // console.log(this._current);
-    // let start = (shift.started_at) ? shift.started_at : new Date();
-    // let end = (shift.ended_at) ? shift.ended_at : new Date();
-
     let defer = Q.get(this).defer();
 
     Meteor.call('/orm/transactions/filter/', { shift_id: shift.id }, (error, result) => {
@@ -109,6 +105,25 @@ export default class Shift {
   printSummary(data) {
     let defer = Q.get(this).defer();
     Meteor.call('/orm/shifts/print-summary/', data, (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
+
+  shiftTransactions(shift) {
+    shift = (shift) ? shift : this.current();
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/transactions/in-shift-all/', { shift_id: shift.id }, (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
+
+  shiftItems (array) {
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/lineitems/shiftItems/', array, (error, result) => {
       (error) ? defer.reject(error) : false;
       (result) ? defer.resolve(result) : false;
     });

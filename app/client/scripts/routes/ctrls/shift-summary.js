@@ -3,20 +3,25 @@ import _ from 'lodash';
 const SHIFT = new WeakMap();
 const LOCATION = new WeakMap();
 const TRANSACTION = new WeakMap();
+const ITEM = new WeakMap();
 
 export default class ShiftSummaryCtrl {
-  constructor (Shift, $location, Transaction, $mdDialog) {
+  constructor (Shift, $location, Transaction, $mdDialog, Item) {
     'ngInject';
 
+    ITEM.set(this, Item);
     SHIFT.set(this, Shift);
     LOCATION.set(this, $location);
     TRANSACTION.set(this, Transaction);
     
     this._transactions = [];
+    this._items = [];
     this._totalCash = 0;
     this._totalCard = 0;
     this._selectedPurchaseItems = [];
     this._selectedPurchase = {};
+    this._transactionsIds = [];
+    this._shiftItems = [];
 
     this._init();
   }
@@ -30,6 +35,18 @@ export default class ShiftSummaryCtrl {
       this._transactions = r;
       this._shiftTotal(r);
     });
+
+    SHIFT.get(this).shiftTransactions().then(r => {
+      angular.forEach(r, (singleton) => {
+        this._transactionsIds.push(singleton.id);
+      });
+    });
+
+    ITEM.get(this).all().then(r => {
+      this._items = r;
+    });
+
+    
   }
 
   _transactionItems(trans) {
@@ -73,13 +90,37 @@ export default class ShiftSummaryCtrl {
     let data = {};
     data.cash = this._totalCash;
     data.card = this._totalCard;
-    SHIFT.get(this).printSummary(data).then(r => {
-      console.log(r);
+    // SHIFT.get(this).printSummary(data).then(r => {
+    //   console.log(r);
+    // });
+
+    SHIFT.get(this).shiftItems(this._transactionsIds).then(r => {
+      let itemized = this.itemNames(r);
+      console.log(itemized);
     });
   }
 
+  itemNames (array) {
+    let namedItems = [];
+    namedItems = _.map(array, (value) => {
+      let idx = _.findIndex(this._items, {id: parseInt(value.item_id)});
+      let name = (idx > -1) ? this._items[idx].name : '';
+      return name;
+    });
+
+    let a = namedItems.reduce(function (acc, curr) {
+      if (typeof acc[curr] == 'undefined') {
+        acc[curr] = 1;
+      } else {
+        acc[curr] += 1;
+      }
+      return acc;
+    }, {});
+
+    return a;
+  }
+
   calculate(props) {
-    console.log(props);
     let total = props.total;
     let discount = 0;
     if ('discount' in props) {
@@ -87,4 +128,6 @@ export default class ShiftSummaryCtrl {
     }
     return Math.round(parseFloat(total) - parseFloat(discount));
   }
+
+
 }
