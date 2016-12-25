@@ -4,14 +4,16 @@ const ORDER = new WeakMap();
 const ITEM = new WeakMap();
 const SHIFT = new WeakMap();
 const LOCATION = new WeakMap();
+const DISCOUNT = new WeakMap();
 
 export default class OrderCtrl {
-  constructor(Order, Item, Shift, $location) {
+  constructor(Order, Item, Shift, Discount, $location) {
     'ngInject';
     ORDER.set(this, Order);
     ITEM.set(this, Item);
     SHIFT.set(this, Shift);
     LOCATION.set(this, $location);
+    DISCOUNT.set(this, Discount);
 
     this._items = [];
     this._shift = false;
@@ -45,6 +47,11 @@ export default class OrderCtrl {
         table.tableNumber = i+1;
         this._tables.push(table);
       }
+    });
+
+    DISCOUNT.get(this).all().then(data => {
+      console.log(data);
+      this._discounts = data;
     });
 
     this._hideOrderBox = false;

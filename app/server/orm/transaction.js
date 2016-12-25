@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import fs from 'fs';
 
 let Transaction = new PG.Table('transactions');
 
