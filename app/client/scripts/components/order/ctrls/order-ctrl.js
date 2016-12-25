@@ -104,6 +104,7 @@ export default class OrderCtrl {
     this._showCardIn = false;
     this.cashRec = null;
     this.cardRecp = null;
+    this._people = 0;
   }
 
   print (props, flag) {
@@ -144,6 +145,7 @@ export default class OrderCtrl {
     }
     this._showCashIn = false;
     this._showCardIn = false;
+    this._people = 0;
     ORDER.get(this).reset();
     LOCATION.get(this).path('/');
   }
