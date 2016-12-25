@@ -89,6 +89,7 @@ export default class OrderCtrl {
   save (props) {
     props = (props) ? {properties: props} : false;
     ORDER.get(this).save(props);
+    ORDER.get(this).duplicatePrint(props);
     this._showPaymentTypes = !this._showPaymentTypes;
     this.print(props, true);
     if(this._currentTable) {
@@ -105,10 +106,10 @@ export default class OrderCtrl {
     this.cashRec = null;
     this.cardRecp = null;
     this._people = 0;
+
   }
 
   print (props, flag) {
-    console
     if(angular.isUndefined(flag)) {
       props = (props) ? {properties: props} : false;
     }
