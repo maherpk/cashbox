@@ -46,9 +46,9 @@ export default class ShiftSummaryCtrl {
     //console.log(transactions);
     angular.forEach(transactions, (singleton) =>{
       if (singleton.properties.transaction_type=="cash") {
-        this._totalCash += parseFloat(singleton.properties.total);
+        this._totalCash += this.calculate(singleton.properties);
       } else if (singleton.properties.transaction_type=="card") {
-        this._totalCard += parseFloat(singleton.properties.total);
+        this._totalCard += this.calculate(singleton.properties);
       }
     });
   }
@@ -76,5 +76,15 @@ export default class ShiftSummaryCtrl {
     SHIFT.get(this).printSummary(data).then(r => {
       console.log(r);
     });
+  }
+
+  calculate(props) {
+    console.log(props);
+    let total = props.total;
+    let discount = 0;
+    if ('discount' in props) {
+      discount = props.discount;
+    }
+    return Math.round(parseFloat(total) - parseFloat(discount));
   }
 }

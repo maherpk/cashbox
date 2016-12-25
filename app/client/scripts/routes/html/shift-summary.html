@@ -42,7 +42,7 @@
 		          	<img alt="cash" ng-src="\imgs\cash.png" class="md-avatar" ng-show="trans.properties.transaction_type=='cash'">
 		          	<img alt="card" ng-src="\imgs\cc.png" class="md-avatar" ng-show="trans.properties.transaction_type=='card'">
 		            <p>{{ trans.created_at | date:'medium' }}</p>
-		            <h1 class="md-secondary" >{{ trans.properties.total | currency:"Rs. " }}</h1>
+		            <h1 class="md-secondary" >{{ $routeCtrl.calculate(trans.properties) | currency:"Rs. " }}</h1>
 		          	<md-divider ></md-divider>
 		        </md-list-item>
 			</md-list>
