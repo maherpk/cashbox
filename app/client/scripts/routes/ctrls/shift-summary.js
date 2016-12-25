@@ -101,6 +101,7 @@ export default class ShiftSummaryCtrl {
   }
 
   itemNames (array) {
+    let items = []
     console.log(array);
     let namedItems = [];
     namedItems = _.map(array, (value) => {
@@ -113,16 +114,25 @@ export default class ShiftSummaryCtrl {
 
     console.log(namedItems);
 
-    let a = namedItems.reduce(function (acc, curr) {
-      if (typeof acc[curr] == 'undefined') {
-        acc[curr] = 1;
-      } else {
-        acc[curr] += 1;
-      }
-      return acc;
-    }, {});
+    let groups = _.groupBy(namedItems, (v) => {
+      return v.name;
+    });
 
-    return a;
+    let smry = []; 
+    _.forEach(groups, (k)=> {
+      let q = _.reduce(k, (sm, n) => {
+        console.log(sm);
+        console.log(n);
+        return sm + n.quanity;
+      }, 0);
+
+      smry.push({
+        name: k.name,
+        quanity: q
+      });
+    });
+    console.log(smry);
+    console.log(groups);
   }
 
   calculate(props) {
