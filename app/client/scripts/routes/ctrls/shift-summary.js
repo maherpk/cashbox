@@ -3,25 +3,27 @@ import _ from 'lodash';
 const SHIFT = new WeakMap();
 const LOCATION = new WeakMap();
 const TRANSACTION = new WeakMap();
+const ITEM = new WeakMap();
 
 export default class ShiftSummaryCtrl {
-<<<<<<< Updated upstream
   constructor (Shift, $location, Transaction, $mdDialog) {
-=======
   constructor (Shift, $location, Transaction, $mdDialog, Item, $timeout) {
->>>>>>> Stashed changes
     'ngInject';
 
+    ITEM.set(this, Item);
     SHIFT.set(this, Shift);
     LOCATION.set(this, $location);
     TRANSACTION.set(this, Transaction);
     this.$timeout = $timeout;
     
     this._transactions = [];
+    this._items = [];
     this._totalCash = 0;
     this._totalCard = 0;
     this._selectedPurchaseItems = [];
     this._selectedPurchase = {};
+    this._transactionsIds = [];
+    this._shiftItems = [];
 
     this._init();
   }
@@ -35,6 +37,18 @@ export default class ShiftSummaryCtrl {
       this._transactions = r;
       this._shiftTotal(r);
     });
+
+    SHIFT.get(this).shiftTransactions().then(r => {
+      angular.forEach(r, (singleton) => {
+        this._transactionsIds.push(singleton.id);
+      });
+    });
+
+    ITEM.get(this).all().then(r => {
+      this._items = r;
+    });
+
+    
   }
 
   _transactionItems(trans) {
@@ -75,22 +89,19 @@ export default class ShiftSummaryCtrl {
   }
 
   generateSlip() {
-<<<<<<< Updated upstream
     let data = {};
     data.cash = this._totalCash;
     data.card = this._totalCard;
     SHIFT.get(this).printSummary(data).then(r => {
       console.log(r);
     });
-=======
-   
+
     SHIFT.get(this).shiftItems(this._currentShift).then(r => {
       this.itemNames(r);
     });
   }
 
   printSum(data) {
-    console.log(data);
     SHIFT.get(this).printSummary(data).then(r => {
       console.log(r);
      });
@@ -115,11 +126,10 @@ export default class ShiftSummaryCtrl {
       data.items.push(items[item]);
     }
     this.printSum(data);
->>>>>>> Stashed changes
+
   }
 
   calculate(props) {
-    console.log(props);
     let total = props.total;
     let discount = 0;
     if ('discount' in props) {

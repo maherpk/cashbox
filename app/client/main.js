@@ -9,6 +9,7 @@ import Router from './scripts/routes/routes';
 // importing services
 import Shift from './scripts/services/shift';
 import Category from './scripts/services/categories';
+import Discount from './scripts/services/discount';
 import Item from './scripts/services/item';
 import Order from './scripts/services/order';
 import Transaction from './scripts/services/transaction';
@@ -30,6 +31,7 @@ let app = angular.module('register', [
   .filter('itemPrice', itemPrice)
   .service('Shift', Shift)
   .service('Category', Category)
+  .service('Discount', Discount)
   .service('Item', Item)
   .service('Order', Order)
   .service('Transaction', Transaction)

@@ -69,10 +69,6 @@ export default class Shift {
 
   allTransactions (shift) {
     shift = (shift) ? shift : this.current();
-    // console.log(this._current);
-    // let start = (shift.started_at) ? shift.started_at : new Date();
-    // let end = (shift.ended_at) ? shift.ended_at : new Date();
-
     let defer = Q.get(this).defer();
 
     Meteor.call('/orm/transactions/filter/', { shift_id: shift.id }, (error, result) => {
@@ -114,8 +110,6 @@ export default class Shift {
     });
     return defer.promise;
   }
-<<<<<<< Updated upstream
-=======
 
   shiftTransactions(shift) {
     shift = (shift) ? shift : this.current();
@@ -136,5 +130,4 @@ export default class Shift {
     });
     return defer.promise;
   }
->>>>>>> Stashed changes
 }

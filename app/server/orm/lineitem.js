@@ -9,5 +9,9 @@ Meteor.methods({
   },
   '/orm/lineitems/range/': (start, end) => {
     return LineItem.select('*').whereBetween('created_at'. start, end).run();
+  },
+
+  '/orm/lineitems/shiftItems/': (array) => {
+  	return LineItem.select('*').where('transaction_id', 'in', array).run();
   }
 });

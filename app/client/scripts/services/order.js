@@ -4,6 +4,7 @@ const SHIFT = new WeakMap();
 const TRANSACTION = new WeakMap();
 const ITEM = new WeakMap();
 const Q = new WeakMap();
+const FILTER = new WeakMap();
 
 export default class Order {
   constructor(Shift, Transaction, Item, $filter, $q) {
@@ -14,7 +15,6 @@ export default class Order {
     this._salesTax = 0;
     this._discount = 0;
     this._currentTransaction = 0;
-    this.$filter = $filter;
     this._items = [];
     this._blankItem = {};
     this._renderdItems = [];
@@ -26,6 +26,7 @@ export default class Order {
     TRANSACTION.set(this, Transaction);
     ITEM.set(this, Item);
     Q.set(this, $q);
+    FILTER.set(this, $filter)
 
     this._init();
   }
@@ -118,8 +119,9 @@ export default class Order {
     _.forEach(order, (singleton) => {
       let item = _.clone(this._blankItem);
       item.Quantity = singleton.quantity;
-      item.Name = this.$filter('itemName')(singleton.item_id, this._items);
-      item.Price = this.$filter('itemPrice')(singleton.item_id, this._items) * singleton.quantity;
+      item.Name = FILTER.get(this)('itemName')(singleton.item_id, this._items);
+      item.Price = FILTER.get(this)('itemPrice')(singleton.item_id, this._items) * singleton.quantity;
+      console.log(item.Name);
       this._renderdItems.push(item);
     });
 
@@ -144,8 +146,9 @@ export default class Order {
     _.forEach(order, (singleton) => {
       let item = _.clone(this._blankItem);
       item.Quantity = singleton.quantity;
-      item.Name = this.$filter('itemName')(singleton.item_id, this._items);
-      item.Price = this.$filter('itemPrice')(singleton.item_id, this._items) * singleton.quantity;
+      item.Name = FILTER.get(this)('itemName')(singleton.item_id, this._items);
+      item.Price = FILTER.get(this)('itemPrice')(singleton.item_id, this._items) * singleton.quantity;
+
       this._renderdItems.push(item);
     });
 
@@ -201,13 +204,12 @@ export default class Order {
     _.forEach(order, (singleton) => {
       let item = _.clone(this._blankItem);
       item.Quantity = singleton.quantity;
-      item.Name = this.$filter('itemName')(singleton.item_id, this._items);
+      item.Name = FILTER.get(this)('itemName')(singleton.item_id, this._items);
       this._orderedItems.push(item);
     });
     obj.items = this._orderedItems;
     obj.table = table.tableNumber;
     TRANSACTION.get(this).kitchen(obj);
-    console.log(this._orderedItems);
   }
 
 }

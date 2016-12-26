@@ -80,7 +80,7 @@
           <md-input-container flex>
             <label>Amount Recieved</label>
             <input type="text" pattern="\d*" name="cashIn" ng-model="$ctrl.cashRec">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: $ctrl.cashRec , balance: $ctrl.cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount(), people: $ctrl._people })" ng-disabled="!$ctrl.cashRec || $ctrl.cashRec<1">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), cash: $ctrl.cashRec , balance: $ctrl.cashRec - ($ctrl.total()+$ctrl.tax()), discount: $ctrl.discount(), people: $ctrl._people , table: $ctrl._currentTable.tableNumber})" ng-disabled="!$ctrl.cashRec || $ctrl.cashRec<1">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
@@ -89,7 +89,7 @@
           <md-input-container flex>
           <label>Reciept No.</label>
             <input type="text" name="cardRec" ng-model="$ctrl.cardRecp">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: $ctrl.cardRecp, discount: $ctrl.discount(), people: $ctrl._people })" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({transaction_type: 'card', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), recp: $ctrl.cardRecp, discount: $ctrl.discount(), people: $ctrl._people, table: $ctrl._currentTable.tableNumber })" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
@@ -106,11 +106,11 @@
             Card
           </md-button>
           <md-button class="md-raised md-primary"
-            ng-click="$ctrl.cashIn({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl._people })">
+            ng-click="$ctrl.cashIn({transaction_type: 'cash', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl._people, table: $ctrl._currentTable.tableNumber })">
             Cash
           </md-button>
-          <md-button class="md-raised" ng-click="$ctrl.printAgain({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl._people })" >Print</md-button>
-          <md-button class="md-raised md-accent" ng-click="$ctrl.qBills({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl._people })">Hold</md-button>
+          <md-button class="md-raised" ng-click="$ctrl.printAgain({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl._people, table: $ctrl._currentTable.tableNumber })" >Print</md-button>
+          <md-button class="md-raised md-accent" ng-click="$ctrl.qBills({transaction_type: '', total: $ctrl.total()+$ctrl.tax(), tax: $ctrl.tax(), discount: $ctrl.discount(), people: $ctrl._people, table: $ctrl._currentTable.tableNumber })">Hold</md-button>
         </div>
         <div class="md-toolbar-tools" ng-if="!$ctrl._showPaymentTypes">
           <md-button class="md-raised md-hue"

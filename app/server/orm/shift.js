@@ -1,5 +1,6 @@
+import _ from 'lodash';
 let Shifts = new PG.Table('shifts');
-let TransItems = new PG.Table('transactions_vista');
+let TransItems = new PG.Table('lineitems_vista');
 
 Meteor.methods({
   '/orm/shifts/add/': () => {
@@ -49,46 +50,37 @@ Meteor.methods({
   },
 
   '/orm/shifts/shift-items/': (data) => {
-    return TransItems.returning('*').where(data).run();
+    return TransItems.returning('*').where(data).orderBy('category_id').run();
   },
 
   '/orm/shifts/print-summary/': (data) => {
     let device = new Escpos.USB();
-<<<<<<< Updated upstream:app/orm/shift.js
-      let printer = new Escpos.Printer(device);
-      let time = new Date();
-=======
     let printer = new Escpos.Printer(device);
     let time = new Date().toLocaleString('en-US', {
         timeZone: 'Asia/Karachi'
       });
->>>>>>> Stashed changes:app/server/orm/shift.js
       let obj = {};
       let subTotal = 0;
       obj.DATE = time;
       obj.CASH = parseFloat(data.cash).toFixed(2);
       obj.CARD = parseFloat(data.card).toFixed(2);
+      obj.Items = data.items;
       let stCash = "Cash Amount" + String(obj.CASH);
       let stCard = "Card Amount" + String(obj.CARD);
       let stTotal = "Total" + String(obj.CASH + obj.CARD);
       let total = (parseFloat(data.cash) + parseFloat(data.card)).toFixed(2);
-<<<<<<< Updated upstream:app/orm/shift.js
-
-      Escpos.Image.load('http://localhost:3000/imgs/logo.png', function(image){
-=======
       
       Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image){
->>>>>>> Stashed changes:app/server/orm/shift.js
       device.open(function() {
         printer
           .align('ct')
           .raster(image)
-          .text('')
-          .text('')
+          .text('Emporium Mall Lahore')
+          .text('GST#: 41709462')
           .font('a')
           .align('ct')
           .style('bu')
-          .size(2, 2)
+          .size(3, 3)
           .text('Shift Summary')
           .size(3, 3)
           .text(obj.DATE)
@@ -102,23 +94,20 @@ Meteor.methods({
           .text('Card Amount' + ' '.repeat(48-stCard.length) + obj.CARD)
           .text('')
           .text('Total' + ' '.repeat(48-stTotal.length) + total)
-<<<<<<< Updated upstream:app/orm/shift.js
-=======
           .text('-'.repeat(48))
           .size(3, 3)
           .text('')
           _.forEach(obj.Items, (item) => {
-            let iN = item.name + item.quantity;
+            let iN = item.name + item.quantity + parseInt(parseFloat(item.item_total) * 0.8 * 1.16);
             let spaces = 1;
-            if (iN.length < 48) {
-              spaces = 48-iN.length;
+            if (iN.length < 44) {
+              spaces = 44-iN.length;
             }
-            let iNSpaced = item.name + " ".repeat(spaces) + item.quantity;
+            let iNSpaced = item.name + " ".repeat(spaces) + item.quantity + "  " + parseInt(parseFloat(item.item_total) * 0.8 * 1.16);
             printer
               .text(iNSpaced)
           });
           printer
->>>>>>> Stashed changes:app/server/orm/shift.js
           .text('')
           .text('')
           .cut()
