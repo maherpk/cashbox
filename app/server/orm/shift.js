@@ -1,4 +1,11 @@
 import _ from 'lodash';
+import jsonExport from 'jsonexport';
+import mailgun from 'mailgun-js';
+let MG = mailgun({
+  apiKey: 'key-91d80031ad7a2f1133fd3fbdee7c55d5',
+  domain: 'doubledip.com'
+});
+
 let Shifts = new PG.Table('shifts');
 let TransItems = new PG.Table('lineitems_vista');
 
@@ -13,12 +20,6 @@ Meteor.methods({
   '/orm/shifts/end/': (shiftID) => {
     let timestamp = new Date();
     Shifts.update({ended_at: timestamp}).where({id: shiftID}).run();
-    // return Shifts
-    //   .where({
-    //     id: shiftID
-    //   }).udpate({
-    //     ended_at: timestamp
-    //   }).run();
   },
   '/orm/shifts/latest/': () => {
     return Shifts.returning(['id', 'started_at', 'ended_at'])
@@ -112,6 +113,37 @@ Meteor.methods({
           .text('')
           .cut()
         });
+    });
+  },
+
+  '/orm/shifts/all-items-csv/': () => {
+    let data = TransItems.returning('*').run();
+
+    jsonExport(data, (err, s) => {
+      console.log(s);
+      let bfr = Buffer.from(s, 'utf-8');
+
+      let name = new Date().toISOString().slice(0,new Date().toISOString().indexOf("T")).replace(/-/g,"");
+
+      let attach = new MG.Attachment({data: bfr, filename: name+'.csv'});
+
+      let emailData = {
+        from: 'Mocca Emporium <noreply@doubledip.com>',
+        to: 'yousuf@maher.pk',
+        subject: 'Shift Summary',
+        text: 'Mocca shift  summary for ' + new Date(),
+        attachment: attach
+      };
+
+      MG.messages().send(emailData, (err, s) => {
+        console.log(err);
+        console.log(s);
+      });
+    });    
+    
+    MG.messages().send(emailData, (s, e) => {
+      console.log(s);
+      console.log(e);
     });
   }
 });

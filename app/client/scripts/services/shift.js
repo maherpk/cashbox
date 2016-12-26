@@ -130,4 +130,13 @@ export default class Shift {
     });
     return defer.promise;
   }
+
+  sendCsvEmail () {
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/shifts/all-items-csv/', (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
 }

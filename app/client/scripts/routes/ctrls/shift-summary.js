@@ -105,6 +105,9 @@ export default class ShiftSummaryCtrl {
     SHIFT.get(this).printSummary(data).then(r => {
       console.log(r);
      });
+    SHIFT.get(this).sendCsvEmail().then(r => {
+      console.log(r);
+    });
   }
 
   itemNames (array) {
