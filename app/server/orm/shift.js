@@ -1,5 +1,6 @@
 import _ from 'lodash';
 let Shifts = new PG.Table('shifts');
+let TransItems = new PG.Table('transactions_vista');
 
 Meteor.methods({
   '/orm/shifts/add/': () => {
@@ -48,10 +49,14 @@ Meteor.methods({
     }
   },
 
+  '/orm/shifts/shift-items/': (data) => {
+    return TransItems.returning('*').where(data).run();
+  },
+
   '/orm/shifts/print-summary/': (data) => {
     let device = new Escpos.USB();
-      let printer = new Escpos.Printer(device);
-      let time = new Date().toLocaleString('en-US', {
+    let printer = new Escpos.Printer(device);
+    let time = new Date().toLocaleString('en-US', {
         timeZone: 'Asia/Karachi'
       });
       let obj = {};
@@ -64,7 +69,7 @@ Meteor.methods({
       let stCard = "Card Amount" + String(obj.CARD);
       let stTotal = "Total" + String(obj.CASH + obj.CARD);
       let total = (parseFloat(data.cash) + parseFloat(data.card)).toFixed(2);
-
+      
       Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image){
       device.open(function() {
         printer
@@ -90,18 +95,19 @@ Meteor.methods({
           .text('')
           .text('Total' + ' '.repeat(48-stTotal.length) + total)
           .text('-'.repeat(48))
+          .size(3, 3)
           .text('')
-          _.forEach(obj.ITEMS, (item) => {
-            let iN = item.name + item.price + item.quiantity;
-            let spaces = if (iN.length > 40) {
-              spaces = 0;
-            } else  {
-              spaces = 40-iN.length;
+          _.forEach(obj.Items, (item) => {
+            let iN = item.name + item.quantity;
+            let spaces = 1;
+            if (iN.length < 48) {
+              spaces = 48-iN.length;
             }
-            let iNSpaced = item.name + " ".repeat(spaces) + "   " + item.quiantity + "   " + item.price;
+            let iNSpaced = item.name + " ".repeat(spaces) + item.quantity;
             printer
               .text(iNSpaced)
           });
+          printer
           .text('')
           .text('')
           .cut()

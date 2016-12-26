@@ -6,13 +6,14 @@ const TRANSACTION = new WeakMap();
 const ITEM = new WeakMap();
 
 export default class ShiftSummaryCtrl {
-  constructor (Shift, $location, Transaction, $mdDialog, Item) {
+  constructor (Shift, $location, Transaction, $mdDialog, Item, $timeout) {
     'ngInject';
 
     ITEM.set(this, Item);
     SHIFT.set(this, Shift);
     LOCATION.set(this, $location);
     TRANSACTION.set(this, Transaction);
+    this.$timeout = $timeout;
     
     this._transactions = [];
     this._items = [];
@@ -87,52 +88,38 @@ export default class ShiftSummaryCtrl {
   }
 
   generateSlip() {
-    let data = {};
-    data.cash = this._totalCash;
-    data.card = this._totalCard;
-    // SHIFT.get(this).printSummary(data).then(r => {
-    //   console.log(r);
-    // });
-
-    SHIFT.get(this).shiftItems(this._transactionsIds).then(r => {
-      let itemized = this.itemNames(r);
-      console.log(itemized);
+   
+    SHIFT.get(this).shiftItems(this._currentShift).then(r => {
+      this.itemNames(r);
     });
   }
 
+  printSum(data) {
+    console.log(data);
+    SHIFT.get(this).printSummary(data).then(r => {
+      console.log(r);
+     });
+  }
+
   itemNames (array) {
-    let items = []
-    console.log(array);
-    let namedItems = [];
-    namedItems = _.map(array, (value) => {
-      let idx = _.findIndex(this._items, {id: parseInt(value.item_id)});
-      value.name = (idx > -1) ? this._items[idx].name : '';
-      value.unitPrice = (idx > -1) ? this._items[idx].price : '';
-      value.quantity = parseInt(value.quantity);
-      return value;
+    let items = [];
+    angular.forEach(array, (singleton) =>{
+      if(singleton.name in items) {
+        let old = parseInt(items[singleton.name].quantity);
+        let n = parseInt(singleton.quantity) + old;
+        items[singleton.name].quantity = n;
+      } else {
+        items[singleton.name] = singleton;
+      }
     });
-
-    console.log(namedItems);
-
-    let groups = _.groupBy(namedItems, (v) => {
-      return v.name;
-    });
-
-    let smry = []; 
-    _.forEach(groups, (k)=> {
-      let q = _.reduce(k, (sm, n) => {
-        console.log(sm);
-        console.log(n);
-        return sm + n.quanity;
-      }, 0);
-
-      smry.push({
-        name: k.name,
-        quanity: q
-      });
-    });
-    console.log(smry);
-    console.log(groups);
+    let data = {};
+    data.cash = this._totalCash;
+    data.card = this._totalCard;
+    data.items = [];
+    for (let item in items) {
+      data.items.push(items[item]);
+    }
+    this.printSum(data);
   }
 
   calculate(props) {
