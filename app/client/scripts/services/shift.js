@@ -114,4 +114,27 @@ export default class Shift {
     });
     return defer.promise;
   }
+<<<<<<< Updated upstream
+=======
+
+  shiftTransactions(shift) {
+    shift = (shift) ? shift : this.current();
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/transactions/in-shift-all/', { shift_id: shift.id }, (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
+
+  shiftItems (shift) {
+    shift = (shift) ? shift : this.current();
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/shifts/shift-items/', { shift_id: shift.id }, (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
+>>>>>>> Stashed changes
 }

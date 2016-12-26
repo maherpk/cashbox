@@ -1,4 +1,5 @@
 let Shifts = new PG.Table('shifts');
+let TransItems = new PG.Table('transactions_vista');
 
 Meteor.methods({
   '/orm/shifts/add/': () => {
@@ -47,10 +48,21 @@ Meteor.methods({
     }
   },
 
+  '/orm/shifts/shift-items/': (data) => {
+    return TransItems.returning('*').where(data).run();
+  },
+
   '/orm/shifts/print-summary/': (data) => {
     let device = new Escpos.USB();
+<<<<<<< Updated upstream:app/orm/shift.js
       let printer = new Escpos.Printer(device);
       let time = new Date();
+=======
+    let printer = new Escpos.Printer(device);
+    let time = new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Karachi'
+      });
+>>>>>>> Stashed changes:app/server/orm/shift.js
       let obj = {};
       let subTotal = 0;
       obj.DATE = time;
@@ -60,8 +72,13 @@ Meteor.methods({
       let stCard = "Card Amount" + String(obj.CARD);
       let stTotal = "Total" + String(obj.CASH + obj.CARD);
       let total = (parseFloat(data.cash) + parseFloat(data.card)).toFixed(2);
+<<<<<<< Updated upstream:app/orm/shift.js
 
       Escpos.Image.load('http://localhost:3000/imgs/logo.png', function(image){
+=======
+      
+      Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image){
+>>>>>>> Stashed changes:app/server/orm/shift.js
       device.open(function() {
         printer
           .align('ct')
@@ -85,6 +102,23 @@ Meteor.methods({
           .text('Card Amount' + ' '.repeat(48-stCard.length) + obj.CARD)
           .text('')
           .text('Total' + ' '.repeat(48-stTotal.length) + total)
+<<<<<<< Updated upstream:app/orm/shift.js
+=======
+          .text('-'.repeat(48))
+          .size(3, 3)
+          .text('')
+          _.forEach(obj.Items, (item) => {
+            let iN = item.name + item.quantity;
+            let spaces = 1;
+            if (iN.length < 48) {
+              spaces = 48-iN.length;
+            }
+            let iNSpaced = item.name + " ".repeat(spaces) + item.quantity;
+            printer
+              .text(iNSpaced)
+          });
+          printer
+>>>>>>> Stashed changes:app/server/orm/shift.js
           .text('')
           .text('')
           .cut()

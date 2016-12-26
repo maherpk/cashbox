@@ -5,12 +5,17 @@ const LOCATION = new WeakMap();
 const TRANSACTION = new WeakMap();
 
 export default class ShiftSummaryCtrl {
+<<<<<<< Updated upstream
   constructor (Shift, $location, Transaction, $mdDialog) {
+=======
+  constructor (Shift, $location, Transaction, $mdDialog, Item, $timeout) {
+>>>>>>> Stashed changes
     'ngInject';
 
     SHIFT.set(this, Shift);
     LOCATION.set(this, $location);
     TRANSACTION.set(this, Transaction);
+    this.$timeout = $timeout;
     
     this._transactions = [];
     this._totalCash = 0;
@@ -70,12 +75,47 @@ export default class ShiftSummaryCtrl {
   }
 
   generateSlip() {
+<<<<<<< Updated upstream
     let data = {};
     data.cash = this._totalCash;
     data.card = this._totalCard;
     SHIFT.get(this).printSummary(data).then(r => {
       console.log(r);
     });
+=======
+   
+    SHIFT.get(this).shiftItems(this._currentShift).then(r => {
+      this.itemNames(r);
+    });
+  }
+
+  printSum(data) {
+    console.log(data);
+    SHIFT.get(this).printSummary(data).then(r => {
+      console.log(r);
+     });
+  }
+
+  itemNames (array) {
+    let items = [];
+    angular.forEach(array, (singleton) =>{
+      if(singleton.name in items) {
+        let old = parseInt(items[singleton.name].quantity);
+        let n = parseInt(singleton.quantity) + old;
+        items[singleton.name].quantity = n;
+      } else {
+        items[singleton.name] = singleton;
+      }
+    });
+    let data = {};
+    data.cash = this._totalCash;
+    data.card = this._totalCard;
+    data.items = [];
+    for (let item in items) {
+      data.items.push(items[item]);
+    }
+    this.printSum(data);
+>>>>>>> Stashed changes
   }
 
   calculate(props) {
