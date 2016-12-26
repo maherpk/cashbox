@@ -1,6 +1,6 @@
 import _ from 'lodash';
 let Shifts = new PG.Table('shifts');
-let TransItems = new PG.Table('transactions_vista');
+let TransItems = new PG.Table('lineitems_vista');
 
 Meteor.methods({
   '/orm/shifts/add/': () => {
@@ -50,7 +50,7 @@ Meteor.methods({
   },
 
   '/orm/shifts/shift-items/': (data) => {
-    return TransItems.returning('*').where(data).run();
+    return TransItems.returning('*').where(data).orderBy('category_id').run();
   },
 
   '/orm/shifts/print-summary/': (data) => {
@@ -75,12 +75,12 @@ Meteor.methods({
         printer
           .align('ct')
           .raster(image)
-          .text('')
-          .text('')
+          .text('Emporium Mall Lahore')
+          .text('GST#: 41709462')
           .font('a')
           .align('ct')
           .style('bu')
-          .size(2, 2)
+          .size(3, 3)
           .text('Shift Summary')
           .size(3, 3)
           .text(obj.DATE)
@@ -98,12 +98,12 @@ Meteor.methods({
           .size(3, 3)
           .text('')
           _.forEach(obj.Items, (item) => {
-            let iN = item.name + item.quantity;
+            let iN = item.name + item.quantity + parseInt(parseFloat(item.item_total) * 0.8 * 1.16);
             let spaces = 1;
-            if (iN.length < 48) {
-              spaces = 48-iN.length;
+            if (iN.length < 44) {
+              spaces = 44-iN.length;
             }
-            let iNSpaced = item.name + " ".repeat(spaces) + item.quantity;
+            let iNSpaced = item.name + " ".repeat(spaces) + item.quantity + "  " + parseInt(parseFloat(item.item_total) * 0.8 * 1.16);
             printer
               .text(iNSpaced)
           });

@@ -18,8 +18,6 @@ Meteor.methods({
   '/orm/transactions/range/': (start, end) => {
     start = new Date(start).toISOString();
     end = new Date(end).toISOString();
-    console.log(start);
-    console.log(end);
     let query = `created_at BETWEEN '${start}'::timestamp AND '${end}'::timestamp;`;
     //return Transaction.select('*').whereBetween('created_at'. start, end).run();
     return Transaction.select('*').whereRaw(query)
@@ -60,6 +58,8 @@ Meteor.methods({
       let subTotal = 0;
       obj.DATE = time;
       obj.ITEMS = data.items;
+      obj.People = data.trans.properties.people;
+      obj.Table = data.trans.properties.table;
       obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2)
       obj.Discount = parseFloat(data.trans.properties.discount).toFixed(2)
       obj.Total = parseFloat(data.trans.properties.total).toFixed(2)
@@ -70,15 +70,16 @@ Meteor.methods({
           printer
             .align('ct')
             .raster(image)
-            .text('')
+            .size(3, 3)
+            .text('Emporium Mall Lahore')
+            .text('GST#: 41709462')
             .text('')
             .font('a')
             .align('ct')
             .style('bu')
-            .size(2, 2)
             .text('Purchase Invoice')
-            .size(3, 3)
             .text(obj.DATE)
+            .text('Cover'+ ' '.repeat(20-7)+obj.People+ ' '.repeat(4) + 'Table'+' '.repeat(24-7)+obj.Table)
             .font('b')
             .style('normal')
             .text('_'.repeat(48))
@@ -122,7 +123,8 @@ Meteor.methods({
             .text(tOSpaced)
             .text('')
             .text('')
-            .text('')
+            .align('ct')
+            .text('Thank You for visiting Us.')
             .text('')
             .cut()
           resp.status = true;
@@ -151,6 +153,8 @@ Meteor.methods({
       let subTotal = 0;
       obj.DATE = time;
       obj.ITEMS = data.items;
+      obj.People = data.trans.properties.people;
+      obj.Table = data.trans.properties.table;
       obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2);
       obj.Discount = parseFloat(data.trans.properties.discount).toFixed(2);
       if ('cash' in data.trans.properties) {
@@ -162,7 +166,7 @@ Meteor.methods({
       if ('balance' in data.trans.properties) {
         obj.Balance = Math.floor(data.trans.properties.balance);
       }
-      obj.Total = parseFloat(data.trans.properties.total).toFixed(2)
+      obj.Total = Math.floor(parseFloat(data.trans.properties.total) - parseFloat(data.trans.properties.discount));
 
       Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image) {
 
@@ -170,16 +174,18 @@ Meteor.methods({
           printer
             .align('ct')
             .raster(image)
-            .text('')
+            .size(3, 3)
+            .text('Emporium Mall Lahore')
+            .text('GST#: 41709462')
             .text('')
             .font('a')
             .align('ct')
             .style('bu')
-            .size(2, 2)
-            .text('DUPLICATE')
+            .text('Counter Copy')
             .text('Purchase Invoice')
             .size(3, 3)
             .text(obj.DATE)
+            .text('Cover'+ ' '.repeat(20-7)+obj.People+ ' '.repeat(4) + 'Table'+' '.repeat(24-7)+obj.Table)
             .font('b')
             .style('normal')
             .text('_'.repeat(48))

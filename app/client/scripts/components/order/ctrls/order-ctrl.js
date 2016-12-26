@@ -30,7 +30,7 @@ export default class OrderCtrl {
       order: {},
       occupied: false
     }
-    this._people = 0;
+    this._people = 1;
 
     this._init();
   }
@@ -50,7 +50,6 @@ export default class OrderCtrl {
     });
 
     DISCOUNT.get(this).all().then(data => {
-      console.log(data);
       this._discounts = data;
     });
 

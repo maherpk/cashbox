@@ -95,7 +95,6 @@ export default class ShiftSummaryCtrl {
   }
 
   printSum(data) {
-    console.log(data);
     SHIFT.get(this).printSummary(data).then(r => {
       console.log(r);
      });
