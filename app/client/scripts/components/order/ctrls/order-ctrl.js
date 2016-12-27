@@ -202,7 +202,7 @@ export default class OrderCtrl {
     ORDER.get(this).print(props);
   }
 
-  cashIn(props) {
+  cashIn() {
     this._showCashIn = true;
   }
 
@@ -214,6 +214,10 @@ export default class OrderCtrl {
     let amount = 0;
     amount = (this.total() + this.tax()) - this.discount();
     return Math.round(amount);
+  }
+
+  balance() {
+    return Math.round(this.cashRec - this.calculate());
   }
 
   // methods
