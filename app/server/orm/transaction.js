@@ -24,28 +24,6 @@ Meteor.methods({
   },
 
   '/orm/transactions/print/': (data) => {
-
-    // jsonExport(data.items, (err, s) => {
-    //   console.log(s);
-    //   let bfr = Buffer.from(s, 'utf-8');
-
-    //   let emailData = {
-    //     from: 'Mocca Emporium <noreply@doubledip.com>',
-    //     to: 'yousuf@maher.pk',
-    //     subject: 'Hello',
-    //     text: 'Testing some Mailgun awesomness!',
-    //     attachment: bfr
-    //   };
-    //   MG.messages().send(emailData, (err, s) => {
-    //     console.log(err);
-    //     console.log(s);
-    //   });
-    // });    
-    
-    // MG.messages().send(emailData, (s, e) => {
-    //   console.log(s);
-    //   console.log(e);
-    // });
     
     let resp = {};
     try {
@@ -55,14 +33,14 @@ Meteor.methods({
         timeZone: 'Asia/Karachi'
       });
       let obj = {};
-      let subTotal = 0;
       obj.DATE = time;
       obj.ITEMS = data.items;
       obj.People = data.trans.properties.people;
       obj.Table = data.trans.properties.table;
       obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2)
       obj.Discount = parseFloat(data.trans.properties.discount).toFixed(2)
-      obj.Total = parseFloat(data.trans.properties.total).toFixed(2)
+      obj.SubTotal = parseFloat(data.trans.properties.sub_total).toFixed(2)
+      obj.GrandTotal = parseFloat(data.trans.properties.grand_total).toFixed(2)
 
       Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image) {
 
@@ -95,13 +73,12 @@ Meteor.methods({
               length = 48
             };
             let spaced = item.Name + " ".repeat(48 - length) + " ".repeat(3 - String(item.Quantity).length) + item.Quantity + " ".repeat(5 - String(item.Price).length) + item.Price + '.00';
-            subTotal += parseInt(item.Price);
             printer
               .align('ct')
               .text(spaced)
           });
-          let sB = 'Sub Total' + subTotal + '.00';
-          let sBSpaced = 'Sub Total' + ' '.repeat(48 - sB.length) + subTotal + '.00';
+          let sB = 'Sub Total' + obj.SubTotal + '.00';
+          let sBSpaced = 'Sub Total' + ' '.repeat(48 - sB.length) + obj.SubTotal + '.00';
           printer
             .align('ct')
             .text('-'.repeat(48))
@@ -117,8 +94,8 @@ Meteor.methods({
             .text(dTSpaced)
             .size(2, 2)
             .control('LF')
-          let tO = 'Total' + Math.round(obj.Total);
-          let tOSpaced = 'Total' + " ".repeat(48 - tO.length) + Math.round(obj.Total);
+          let tO = 'Total' + obj.GrandTotal;
+          let tOSpaced = 'Total' + " ".repeat(48 - tO.length) + obj.GrandTotal;
           printer
             .text(tOSpaced)
             .text('')
@@ -142,6 +119,7 @@ Meteor.methods({
   },
 
   '/orm/transactions/duplicate-print/': (data) => {
+
     let resp = {};
     try {
       let device = new Escpos.USB();
@@ -150,13 +128,15 @@ Meteor.methods({
         timeZone: 'Asia/Karachi'
       });
       let obj = {};
-      let subTotal = 0;
       obj.DATE = time;
       obj.ITEMS = data.items;
       obj.People = data.trans.properties.people;
       obj.Table = data.trans.properties.table;
       obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2);
       obj.Discount = parseFloat(data.trans.properties.discount).toFixed(2);
+      obj.SubTotal = parseFloat(data.trans.properties.sub_total).toFixed(2);
+      obj.GrandTotal = parseFloat(data.trans.properties.grand_total).toFixed(2);
+
       if ('cash' in data.trans.properties) {
         obj.CashIn = parseFloat(data.trans.properties.cash).toFixed(2);
       }
@@ -166,10 +146,8 @@ Meteor.methods({
       if ('balance' in data.trans.properties) {
         obj.Balance = Math.floor(data.trans.properties.balance);
       }
-      obj.Total = Math.floor(parseFloat(data.trans.properties.total) - parseFloat(data.trans.properties.discount));
 
       Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image) {
-
         device.open(function() {
           printer
             .align('ct')
@@ -201,13 +179,12 @@ Meteor.methods({
               length = 48
             };
             let spaced = item.Name + " ".repeat(48 - length) + " ".repeat(3 - String(item.Quantity).length) + item.Quantity + " ".repeat(5 - String(item.Price).length) + item.Price + '.00';
-            subTotal += parseInt(item.Price);
             printer
               .align('ct')
               .text(spaced)
           });
-          let sB = 'Sub Total' + subTotal + '.00';
-          let sBSpaced = 'Sub Total' + ' '.repeat(48 - sB.length) + subTotal + '.00';
+          let sB = 'Sub Total' + obj.SubTotal + '.00';
+          let sBSpaced = 'Sub Total' + ' '.repeat(48 - sB.length) + obj.SubTotal + '.00';
           printer
             .align('ct')
             .text('-'.repeat(48))
@@ -223,8 +200,8 @@ Meteor.methods({
             .text(dTSpaced)
             .size(2, 2)
             .control('LF')
-          let tO = 'Total' + Math.round(obj.Total);
-          let tOSpaced = 'Total' + " ".repeat(48 - tO.length) + Math.round(obj.Total);
+          let tO = 'Total' + obj.GrandTotal;
+          let tOSpaced = 'Total' + " ".repeat(48 - tO.length) + obj.GrandTotal;
           printer
             .text(tOSpaced)
 
