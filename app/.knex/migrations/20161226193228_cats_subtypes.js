@@ -4,6 +4,9 @@ exports.up = function (knex, Promise) {
     knex.schema.table('categories', (table) => {
       table.string('family');
       table.string('sub_family');
+    }),
+    knex.schema.table('discounts', (table) => {
+      table.boolean('is_active', true);
     })
   ]);
 };
