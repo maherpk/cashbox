@@ -30,12 +30,6 @@ check@1.2.4
 
 simple:pg
 local:escpos
-<<<<<<< HEAD
 omega:meteor-desktop-watcher@=0.2.5
 omega:meteor-desktop-bundler@=0.2.5
 omega:meteor-desktop-localstorage@=0.0.11
-=======
-omega:meteor-desktop-watcher@=0.2.3
-omega:meteor-desktop-bundler@=0.2.3
-omega:meteor-desktop-localstorage@=0.0.11
->>>>>>> master
