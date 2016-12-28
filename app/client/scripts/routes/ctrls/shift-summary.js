@@ -6,7 +6,6 @@ const TRANSACTION = new WeakMap();
 const ITEM = new WeakMap();
 
 export default class ShiftSummaryCtrl {
-  constructor (Shift, $location, Transaction, $mdDialog) {
   constructor (Shift, $location, Transaction, $mdDialog, Item, $timeout) {
     'ngInject';
 
