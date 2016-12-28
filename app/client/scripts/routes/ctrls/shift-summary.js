@@ -125,12 +125,7 @@ export default class ShiftSummaryCtrl {
   }
 
   calculate(props) {
-    let total = props.total;
-    let discount = 0;
-    if ('discount' in props) {
-      discount = props.discount;
-    }
-    return Math.round(parseFloat(total) - parseFloat(discount));
+    return parseInt(props.grand_total);
   }
 
 
