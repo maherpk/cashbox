@@ -77,8 +77,8 @@ Meteor.methods({
               .align('ct')
               .text(spaced)
           });
-          let sB = 'Sub Total' + obj.SubTotal + '.00';
-          let sBSpaced = 'Sub Total' + ' '.repeat(48 - sB.length) + obj.SubTotal + '.00';
+          let sB = 'Sub Total' + obj.SubTotal;
+          let sBSpaced = 'Sub Total' + ' '.repeat(48 - sB.length) + obj.SubTotal;
           printer
             .align('ct')
             .text('-'.repeat(48))
@@ -183,8 +183,8 @@ Meteor.methods({
               .align('ct')
               .text(spaced)
           });
-          let sB = 'Sub Total' + obj.SubTotal + '.00';
-          let sBSpaced = 'Sub Total' + ' '.repeat(48 - sB.length) + obj.SubTotal + '.00';
+          let sB = 'Sub Total' + obj.SubTotal;
+          let sBSpaced = 'Sub Total' + ' '.repeat(48 - sB.length) + obj.SubTotal;
           printer
             .align('ct')
             .text('-'.repeat(48))
