@@ -5,17 +5,17 @@ Package.describe({
 });
 
 Npm.depends({
-  bookshelf: '0.8.1',
-  knex: '0.8.6',
+  bookshelf: '0.10.0',
+  knex: '0.11.0',
   exposify: '0.4.3',
-  bluebird: '2.9.34'
+  bluebird: '2.9.34',
 });
 
 Package.onUse(function(api) {
   api.versionsFrom('1.4.2');
   api.use('modules');
   api.use('ecmascript');
-  api.use('underscore');
+  api.use('erasaur:meteor-lodash');
 
   api.use('cosmos:browserify@0.9.2');
   // api.addFiles(, 'client');

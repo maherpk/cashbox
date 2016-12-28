@@ -26,7 +26,7 @@ export default class Order {
     TRANSACTION.set(this, Transaction);
     ITEM.set(this, Item);
     Q.set(this, $q);
-    FILTER.set(this, $filter)
+    FILTER.set(this, $filter);
 
     this._init();
   }
@@ -42,7 +42,7 @@ export default class Order {
   }
 
   addItem(itemID) {
-    let idx = _.findIndex(this._order, {item_id: itemID});
+    let idx = _.findIndex(this._order, { item_id: itemID });
     if (idx > -1) {
       this._order[idx].quantity += 1;
     } else {
@@ -54,7 +54,7 @@ export default class Order {
   }
 
   removeItem(itemID) {
-    let idx = _.findIndex(this._order, {item_id: itemID});
+    let idx = _.findIndex(this._order, { item_id: itemID });
     if (this._order[idx].quantity === 1) {
       this._order.splice(idx, 1);
     } else {
@@ -62,41 +62,41 @@ export default class Order {
     }
   }
 
-  getTotal (allItems) {
-    this.allItems
+  getTotal(allItems) {
+    this.allItems;
     let total = 0;
     _.forEach(this._order, (singleton) => {
-      let idx = _.findIndex(allItems, {id: singleton.item_id});
+      let idx = _.findIndex(allItems, { id: singleton.item_id });
       total += (allItems[idx].price * singleton.quantity);
     });
 
     return total;
   }
 
-  getTax (amount) {
+  getTax(amount) {
     if (this._salesTax == 0) {
       TRANSACTION.get(this).getSalesTax().then(data => {
         this._salesTax = parseInt(data.value);
       });
     }
 
-    let taxed = (parseInt(this._salesTax) / 100) * parseInt(amount)
+    let taxed = (parseInt(this._salesTax) / 100) * parseInt(amount);
     return taxed;
   }
 
-  getDiscount (amount) {
-    if(this._discount == 0) {
-        TRANSACTION.get(this).getDiscount().then(data => {
+  getDiscount(amount) {
+    if (this._discount == 0) {
+      TRANSACTION.get(this).getDiscount().then(data => {
         this._discount = parseInt(data.value);
       });
     }
-    
 
-    let discounted = (parseInt(this._discount) / 100) * parseInt(amount)
+
+    let discounted = (parseInt(this._discount) / 100) * parseInt(amount);
     return discounted;
   }
 
-  save (obj) {
+  save(obj) {
     obj = obj ? obj : {};
     let order = _.clone(this._order);
     let shiftID = SHIFT.get(this).current().id;
@@ -115,7 +115,7 @@ export default class Order {
     let defer = Q.get(this).defer();
     this._renderTransaction.trans = transaction;
     let order = _.clone(this._order);
-      this._renderdItems = [];
+    this._renderdItems = [];
     _.forEach(order, (singleton) => {
       let item = _.clone(this._blankItem);
       item.Quantity = singleton.quantity;
@@ -126,23 +126,23 @@ export default class Order {
     });
 
     this._renderTransaction.items = _.clone(this._renderdItems);
-    
+
     TRANSACTION.get(this).printTransaction(this._renderTransaction).then(resp => {
-      if(resp.status != true) {
+      if (resp.status != true) {
         defer.resolve(resp.message);
       } else {
         defer.reject(true);
       }
     });
-    
-   return defer.promise;
+
+    return defer.promise;
   }
 
   duplicatePrint(transaction) {
     let defer = Q.get(this).defer();
     this._renderTransaction.trans = transaction;
     let order = _.clone(this._order);
-      this._renderdItems = [];
+    this._renderdItems = [];
     _.forEach(order, (singleton) => {
       let item = _.clone(this._blankItem);
       item.Quantity = singleton.quantity;
@@ -152,19 +152,19 @@ export default class Order {
     });
 
     this._renderTransaction.items = _.clone(this._renderdItems);
-    
+
     TRANSACTION.get(this).duplicatePrint(this._renderTransaction).then(resp => {
-      if(resp.status != true) {
+      if (resp.status != true) {
         defer.resolve(resp.message);
       } else {
         defer.reject(true);
       }
     });
-    
-   return defer.promise;
+
+    return defer.promise;
   }
 
-  reset () {
+  reset() {
     this._order = _.clone(this._defaultOrder);
   }
 

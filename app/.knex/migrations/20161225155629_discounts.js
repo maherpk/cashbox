@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
       table.string('name').notNullable();
       table.decimal('value');
       table.string('operator');
+      table.boolean('is_active', true);
     })
   ]);
 };

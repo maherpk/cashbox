@@ -20,7 +20,9 @@
     "mailgun-js": "^0.7.15"
   },
   "devDependencies": {
+    "babel-eslint": "^7.1.1",
     "babel-plugin-angularjs-annotate": "^0.6.0",
+    "eslint": "^3.12.2",
     "meteor-desktop": "^0.2.3"
   }
 }

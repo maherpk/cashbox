@@ -93,6 +93,7 @@ export default class OrderCtrl {
   }
 
   save (props) {
+    console.log(props);
     props = (props) ? {properties: props} : false;
     ORDER.get(this).save(props);
     ORDER.get(this).duplicatePrint(props);

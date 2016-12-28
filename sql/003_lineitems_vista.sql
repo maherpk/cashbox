@@ -10,7 +10,8 @@ SELECT
     itms.price as unit_price,
     itms.price*quantity as item_total,
     itms.category_id,
-    category
+    category,
+    family
   FROM line_items
     LEFT JOIN (
       SELECT name, price, category_id, id as iid FROM items
@@ -19,5 +20,5 @@ SELECT
       SELECT created_at, updated_at, shift_id, id as tid FROM transactions
     ) as trnsctns ON line_items.transaction_id = trnsctns.tid
     LEFT JOIN (
-      SELECT name as category, id as cid FROM categories
+      SELECT family, name as category, id as cid FROM categories
       ) as ctgrs ON itms.category_id = ctgrs.cid;

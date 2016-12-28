@@ -12,7 +12,7 @@ knex.queryBuilder = function () {
   return new QueryBuilder();
 };
 
-knex.VERSION = '0.8.6'; // actually just a custom wrapper
+knex.VERSION = '0.11.0'; // actually just a custom wrapper
 
 const methods = [
   'insert', 'update', 'select', 'delete', 'del',
