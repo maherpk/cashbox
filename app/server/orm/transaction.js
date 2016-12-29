@@ -24,7 +24,6 @@ Meteor.methods({
   },
 
   '/orm/transactions/print/': (data) => {
-    
     let resp = {};
     try {
       let device = new Escpos.USB();
@@ -37,10 +36,10 @@ Meteor.methods({
       obj.ITEMS = data.items;
       obj.People = data.trans.properties.people;
       obj.Table = data.trans.properties.table;
-      obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2)
-      obj.Discount = parseFloat(data.trans.properties.discount).toFixed(2)
-      obj.SubTotal = parseFloat(data.trans.properties.sub_total).toFixed(2)
-      obj.GrandTotal = parseFloat(data.trans.properties.grand_total).toFixed(2)
+      obj.SalesTax = parseFloat(data.trans.tax).toFixed(2)
+      obj.Discount = parseFloat(data.trans.discount_value).toFixed(2)
+      obj.SubTotal = parseFloat(data.trans.items_total).toFixed(2)
+      obj.GrandTotal = parseFloat(data.trans.grand_total).toFixed(2)
 
       Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image) {
 
@@ -118,8 +117,7 @@ Meteor.methods({
     }
   },
 
-  '/orm/transactions/duplicate-print/': (data) => {
-
+  '/orm/transactions/duplicate-print/': (data, id) => {
     let resp = {};
     try {
       let device = new Escpos.USB();
@@ -128,24 +126,21 @@ Meteor.methods({
         timeZone: 'Asia/Karachi'
       });
       let obj = {};
+      obj.Id = id;
       obj.DATE = time;
       obj.ITEMS = data.items;
       obj.People = data.trans.properties.people;
       obj.Table = data.trans.properties.table;
-      obj.SalesTax = parseFloat(data.trans.properties.tax).toFixed(2);
-      obj.Discount = parseFloat(data.trans.properties.discount).toFixed(2);
-      obj.SubTotal = parseFloat(data.trans.properties.sub_total).toFixed(2);
-      obj.GrandTotal = parseFloat(data.trans.properties.grand_total).toFixed(2);
+      obj.SalesTax = parseFloat(data.trans.tax).toFixed(2);
+      obj.Discount = parseFloat(data.trans.discount_value).toFixed(2);
+      obj.SubTotal = parseFloat(data.trans.items_total).toFixed(2);
+      obj.GrandTotal = parseFloat(data.trans.grand_total).toFixed(2);
+      obj.CashIn = parseFloat(data.trans.cash).toFixed(2);
+      obj.CardRecp = data.trans.recp;
+      obj.Balance = Math.floor(data.trans.balance);
 
-      if ('cash' in data.trans.properties) {
-        obj.CashIn = parseFloat(data.trans.properties.cash).toFixed(2);
-      }
-      if ('recp' in data.trans.properties) {
-        obj.CardRecp = data.trans.properties.recp;
-      }
-      if ('balance' in data.trans.properties) {
-        obj.Balance = Math.floor(data.trans.properties.balance);
-      }
+      let bN = 'Bill#' + String(obj.Id);
+      let bNSpaced = 'Bill#' + ' '.repeat(48-bN.length) + String(obj.Id);
 
       Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image) {
         device.open(function() {
@@ -164,6 +159,7 @@ Meteor.methods({
             .size(3, 3)
             .text(obj.DATE)
             .text('Cover'+ ' '.repeat(20-7)+obj.People+ ' '.repeat(4) + 'Table'+' '.repeat(24-7)+obj.Table)
+            .text(bNSpaced)
             .font('b')
             .style('normal')
             .text('_'.repeat(48))
@@ -205,7 +201,7 @@ Meteor.methods({
           printer
             .text(tOSpaced)
 
-          if(obj.CashIn) {
+          if(obj.CashIn>0) {
             let cI = 'Cash Rec.' + obj.CashIn;
             let cISpaced = 'Cash Rec.'+" ".repeat(48 - cI.length) + obj.CashIn;
             printer
@@ -239,49 +235,60 @@ Meteor.methods({
   },
 
   '/orm/transactions/kitchen/': (data) => {
-    let device = new Escpos.USB();
-    let printer = new Escpos.Printer(device);
-    let time = new Date();
-    let obj = {};
-    let subTotal = 0;
-    obj.DATE = time;
-    obj.ITEMS = data.items;
-    obj.Table = data.table;
-    device.open(function() {
-      printer
-        .font('a')
-        .align('ct')
-        .style('bu')
-        .size(2, 2)
-        .text('Order List')
-        .size(3, 3)
-        .text(obj.DATE)
-        .size(2, 2)
-        .text('Table #')
-        .size(3, 3)
-        .text(obj.Table)
-        .font('b')
-        .style('normal')
-        .text('_'.repeat(48))
-        .size(1, 1)
-      let head = 'NAME' + ' '.repeat(4) + 'QTY' + ' '.repeat(4);
-      printer
-        .text('NAME' + ' '.repeat(48 - head.length) + 'QTY')
-        .text('='.repeat(48))
-      _.forEach(obj.ITEMS, (item) => {
-        let string = item.Quantity + " ".repeat(4 - String(item.Quantity).length) + item.Name;
-        let spaced = item.Name + " ".repeat(48 - string.length) + " ".repeat(3 - String(item.Quantity).length) + item.Quantity;
-        printer
-          .align('ct')
-          .text(spaced)
+    let resp = {};
+    try {
+      let device = new Escpos.USB();
+      let printer = new Escpos.Printer(device);
+      let time = new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Karachi'
       });
-      printer
-        .text('')
-        .text('')
-        .text('')
-        .text('')
-        .cut()
-    });
+      let obj = {};
+      let subTotal = 0;
+      obj.DATE = time;
+      obj.ITEMS = data.items;
+      obj.Table = data.table;
+      device.open(function() {
+        printer
+          .font('a')
+          .align('ct')
+          .style('bu')
+          .size(2, 2)
+          .text('Order List')
+          .size(3, 3)
+          .text(obj.DATE)
+          .size(2, 2)
+          .text('Table #')
+          .size(3, 3)
+          .text(obj.Table)
+          .font('b')
+          .style('normal')
+          .text('_'.repeat(48))
+          .size(1, 1)
+        let head = 'NAME' + ' '.repeat(4) + 'QTY' + ' '.repeat(4);
+        printer
+          .text('NAME' + ' '.repeat(48 - head.length) + 'QTY')
+          .text('='.repeat(48))
+        _.forEach(obj.ITEMS, (item) => {
+          let string = item.Quantity + " ".repeat(4 - String(item.Quantity).length) + item.Name;
+          let spaced = item.Name + " ".repeat(48 - string.length) + " ".repeat(3 - String(item.Quantity).length) + item.Quantity;
+          printer
+            .align('ct')
+            .text(spaced)
+        });
+        printer
+          .text('')
+          .text('')
+          .text('')
+          .text('')
+          .cut()
+      });
+    } catch (err) {
+      console.log(err);
+      resp.status = false;
+      resp.error = err
+      resp.message = 'Check if Printer is connected and turned On.';
+      return resp;
+    }
   },
 
   '/orm/transactions/in-shift-all/': (params) => {

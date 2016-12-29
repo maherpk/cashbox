@@ -97,18 +97,23 @@ export default class Order {
   }
 
   save(obj) {
+    let defer = Q.get(this).defer();
     obj = obj ? obj : {};
     let order = _.clone(this._order);
     let shiftID = SHIFT.get(this).current().id;
+    let transactionId = null;
 
     obj.shift_id = shiftID;
     TRANSACTION.get(this).save(obj).then(data => {
+      defer.resolve(data);
       this._currentTransaction = data;
       _.forEach(order, (singleton) => {
         singleton.transaction_id = data;
         TRANSACTION.get(this).addLineItem(singleton);
       });
     });
+    
+    return defer.promise;
   }
 
   print(transaction) {
@@ -138,7 +143,7 @@ export default class Order {
     return defer.promise;
   }
 
-  duplicatePrint(transaction) {
+  duplicatePrint(transaction, id) {
     let defer = Q.get(this).defer();
     this._renderTransaction.trans = transaction;
     let order = _.clone(this._order);
@@ -153,7 +158,7 @@ export default class Order {
 
     this._renderTransaction.items = _.clone(this._renderdItems);
 
-    TRANSACTION.get(this).duplicatePrint(this._renderTransaction).then(resp => {
+    TRANSACTION.get(this).duplicatePrint(this._renderTransaction, id).then(resp => {
       if (resp.status != true) {
         defer.resolve(resp.message);
       } else {

@@ -87,10 +87,10 @@ export default class Transaction {
     return defer.promise;
   }
 
-  duplicatePrint(data) {
+  duplicatePrint(data, id) {
     let defer = Q.get(this).defer();
 
-    Meteor.call('/orm/transactions/duplicate-print/', data, (error, result) =>{
+    Meteor.call('/orm/transactions/duplicate-print/', data,id, (error, result) =>{
       (error) ? defer.reject(error) : false;
       (result) ? defer.resolve(result) : false;
     });

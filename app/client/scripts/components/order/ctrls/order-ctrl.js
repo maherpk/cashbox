@@ -20,6 +20,8 @@ export default class OrderCtrl {
     this._showCashIn = false;
     this._showCardIn = false;
     this._currentTable = null;
+    this._discountAmount = 0;
+    this._discountId = null;
     this._people = 1;
     this._serves = [];
     this._bills = [];
@@ -31,6 +33,7 @@ export default class OrderCtrl {
       order: {},
       occupied: false
     }
+
     this._blanktrans = {
       properties: {},
       grand_total: null,
@@ -42,7 +45,6 @@ export default class OrderCtrl {
       transaction_type: ''
     }
     
-
     this._init();
   }
 
@@ -91,6 +93,12 @@ export default class OrderCtrl {
     return ORDER.get(this).getTax(this.itemsTotal());
   }
 
+  calculateDiscount(discount) {
+    this._discountId = discount.id;
+    let string = String(this.itemsTotal()) + String(discount.operator) + String(discount.value);
+    this._discountAmount =  eval(string);
+  }
+
   discountValue() {
     return ORDER.get(this).getDiscount(this.itemsTotal() + this.tax());
   }
@@ -103,19 +111,22 @@ export default class OrderCtrl {
     this._people--;
   }
 
-  save() {
+  prepare() {
     this._currentTrans.transaction_type = this._transaction_type;
     this._currentTrans.grand_total = this.calculateGTotal();
-    this._currentTrans.discount_value = this.discountValue();
+    this._currentTrans.discount_value = this._discountAmount;
     this._currentTrans.items_total = this.itemsTotal();
     this._currentTrans.tax = this.tax();
-    this._currentTrans.cash = parseInt(this.cashRecieve);
-    this._currentTrans.balance = this.balance();
-    if(this._transaction_type == 'card') {
-      this._currentTrans.cash = 0;
-      this._currentTrans.balance = 0;
+    this._currentTrans.cash = 0;
+    this._currentTrans.balance = 0;
+    if(this._transaction_type == 'cash') {
+      this._currentTrans.cash = parseInt(this.cashRecieve);
+      this._currentTrans.balance = this.balance();
     }
-
+    if(!this._discountId) {
+      this._discountId = 1;
+    }
+    this._currentTrans.discount_id = this._discountId;
     let tableNumber = 'Take Away';
     if (this._currentTable){
       tableNumber = this._currentTable.tableNumber;
@@ -126,32 +137,33 @@ export default class OrderCtrl {
       people: this._people,
       card_recp: this.cardRecp 
     }
-
-    console.log(this._currentTrans);
-
   }
 
-  print(props, flag) {
-    if (angular.isUndefined(flag)) {
-      props = (props) ? {
-        properties: props
-      } : false;
-    }
+  save() {
+    this.prepare();
+    ORDER.get(this).save(this._currentTrans).then(r => {
+      ORDER.get(this).duplicatePrint(this._currentTrans, r);
+    });
+
+    this.resetOperations();
+  }
+
+  resetOperations() {
+    this._currentTrans = _.clone(this._blanktrans);
+    this._discountAmount = 0;
+    this.cashRecieve = null;
+    this._showCashIn = false;
+    this._showCardIn = false;
+    this._showPaymentTypes = false;
+    this._transaction_type = '';
+    this._temp = null;
+    this.resetTables();
     ORDER.get(this).reset();
     LOCATION.get(this).path('/');
   }
 
-  endShift() {
-    this._hideOrderBox = true;
-    LOCATION.get(this).path('/summary/');
-  }
-
-  showPaymentTypes(props) {
-    this._showPaymentTypes = !this._showPaymentTypes;
-  }
-
-  abort() {
-    if (this._currentTable) {
+  resetTables() {
+    if(this._currentTable) {
       let index = this._tables.indexOf(this._currentTable);
       this._tables[index].order = {};
       this._tables[index].occupied = false;
@@ -159,11 +171,20 @@ export default class OrderCtrl {
       this._serves.splice(ser, 1);
       this._currentTable = null;
     }
-    this._showCashIn = false;
-    this._showCardIn = false;
-    this._people = 0;
-    ORDER.get(this).reset();
-    LOCATION.get(this).path('/');
+  }
+
+  print() {
+    this.prepare();
+    ORDER.get(this).print(this._currentTrans);
+  }
+
+  endShift() {
+    this._hideOrderBox = true;
+    LOCATION.get(this).path('/summary/');
+  }
+
+  showPaymentTypes() {
+    this._showPaymentTypes = !this._showPaymentTypes;
   }
 
   back() {
@@ -199,11 +220,16 @@ export default class OrderCtrl {
   closeServe(serve) {
     ORDER.get(this).closeServe(serve.order);
     this._currentTable = serve;
+    let idx = this._serves.indexOf(serve);
+    this._serves.splice(idx, 1);
+
   }
 
-  qBills(props) {
-    this._bills.push(props);
+  qBills() {
+    this.prepare();
+    this._bills.push(this._currentTrans);
     this.hold();
+    this.resetOperations();
   }
 
   cashIn() {
@@ -218,7 +244,7 @@ export default class OrderCtrl {
 
   calculateGTotal() {
     let amount = 0;
-    amount = (this.itemsTotal() + this.tax()) - this.discountValue();
+    amount = (this.itemsTotal() + this.tax()) - this._discountAmount;
     return Math.round(amount);
   }
 
@@ -226,5 +252,4 @@ export default class OrderCtrl {
     return Math.round(parseInt(this.cashRecieve) - this.calculateGTotal());
   }
 
-  // methods
 }

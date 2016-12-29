@@ -55,9 +55,8 @@
       <md-divider ></md-divider>
       <md-input-container class="md-margin" style="margin-top: 16px;">
         <label>Select Discount</label>
-        <md-select ng-model="$ctrl._temp">
-          <md-option><em>None</em></md-option>
-          <md-option ng-repeat="discount in $ctrl._discounts" ng-value="discount.id">
+        <md-select ng-model="$ctrl._temp" ng-change="$ctrl.calculateDiscount($ctrl._temp)">
+          <md-option ng-repeat="discount in $ctrl._discounts" ng-value="discount">
             {{ discount.name }}
           </md-option>
         </md-select>
@@ -77,7 +76,7 @@
         </md-list-item>
         <md-list-item>
           <div><strong>Discount:</strong></div>
-          <div class="md-secondary"> - {{ $ctrl.discountValue() | currency: "Rs. "}}</div>
+          <div class="md-secondary"> - {{ $ctrl._discountAmount | currency: "Rs. "}}</div>
         </md-list-item>
         <md-divider ></md-divider>
         <md-divider ></md-divider>
@@ -120,17 +119,15 @@
             ng-click="$ctrl.cashIn()">
             Cash
           </md-button>
-          <md-button class="md-raised" ng-click="$ctrl.printAgain({ transaction_type: '', sub_total: $ctrl.total(), tax: $ctrl.tax(), discount: $ctrl.discount(), grand_total: $ctrl.calculate(), table: $ctrl._currentTable.tableNumber, people: $ctrl._people, card_recp: $ctrl.cardRecp,
-cash_recv: $ctrl.cashRec, balance: $ctrl.balance() })" >Print</md-button>
-          <md-button class="md-raised md-accent" ng-click="$ctrl.qBills({ transaction_type: '', sub_total: $ctrl.total(), tax: $ctrl.tax(), discount: $ctrl.discount(), grand_total: $ctrl.calculate(), table: $ctrl._currentTable.tableNumber, people: $ctrl._people, card_recp: $ctrl.cardRecp,
-cash_recv: $ctrl.cashRec, balance: $ctrl.balance() })">Hold</md-button>
+          <md-button class="md-raised" ng-click="$ctrl.print()">Print</md-button>
+          <md-button class="md-raised md-accent" ng-click="$ctrl.qBills()">Hold</md-button>
         </div>
         <div class="md-toolbar-tools" ng-if="!$ctrl._showPaymentTypes">
           <md-button class="md-raised md-hue"
             ng-disabled="$ctrl.order().length < 1"
             ng-click="$ctrl.showPaymentTypes()">Finalize</md-button>
           <md-button class="md-raised md-hue" ng-disabled="($ctrl.order().length < 1) || (!$ctrl._currentTable)" ng-click="$ctrl.serve()">Serve</md-button>
-          <md-button class="md-raised md-accent" ng-click="$ctrl.abort()">Cancel</md-button>
+          <md-button class="md-raised md-accent" ng-click="$ctrl.resetOperations()">Cancel</md-button>
           <md-button class="md-raised md-hue" ng-click="$ctrl.hold()" ng-disabled="!$ctrl.total()">Hold</md-button>
         </div>
       </md-toolbar>
