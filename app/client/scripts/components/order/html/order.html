@@ -69,7 +69,7 @@
         </md-list-item>
         <md-list-item>
           <div><strong>Sub - Total:</strong></div>
-          <div class="md-secondary"> {{ $ctrl.total() | currency:"Rs. " }} </div>
+          <div class="md-secondary"> {{ $ctrl.itemsTotal() | currency:"Rs. " }} </div>
         </md-list-item>
         <md-list-item>
           <div><strong>Sales Tax:</strong></div>
@@ -77,31 +77,21 @@
         </md-list-item>
         <md-list-item>
           <div><strong>Discount:</strong></div>
-          <div class="md-secondary"> - {{ $ctrl.discount() | currency: "Rs. "}}</div>
+          <div class="md-secondary"> - {{ $ctrl.discountValue() | currency: "Rs. "}}</div>
         </md-list-item>
         <md-divider ></md-divider>
         <md-divider ></md-divider>
         <md-list-item>
           <div><h1>Grand Total:</h1></div>
-          <div class="md-secondary"> {{ $ctrl.calculate() | currency:"Rs. " }}</div>
+          <div class="md-secondary"> {{ $ctrl.calculateGTotal() | currency:"Rs. " }}</div>
         </md-list-item>
         <md-list-item ng-show="$ctrl._showCashIn">
           <md-input-container flex>
             <label>Amount Recieved</label>
-            <input type="text" pattern="\d*" name="cashIn" ng-model="$ctrl.cashRec">
+            <input type="text" pattern="\d*" name="cashIn" ng-model="$ctrl.cashRecieve">
             <md-button class="md-secondary md-fab md-mini md-hue-2"
-              ng-click="$ctrl.save({
-                transaction_type: 'cash', 
-                sub_total: $ctrl.total(), 
-                tax: $ctrl.tax(), 
-                discount: $ctrl.discount(), grand_total: $ctrl.calculate(),
-                table: $ctrl._currentTable.tableNumber, 
-                people: $ctrl._people, 
-                card_recp: $ctrl.cardRecp,
-                cash_recv: $ctrl.cashRec, 
-                balance: $ctrl.balance() 
-              })" 
-              ng-disabled="!$ctrl.cashRec || $ctrl.cashRec<1 || $ctrl.cashRec<$ctrl.calculate()">
+              ng-click="$ctrl.save()" 
+              ng-disabled="!$ctrl.cashRecieve || $ctrl.cashRecieve<1 || $ctrl.cashRecieve<$ctrl.calculateGTotal()">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>
@@ -110,8 +100,7 @@
           <md-input-container flex>
           <label>Reciept No.</label>
             <input type="text" name="cardRec" ng-model="$ctrl.cardRecp">
-            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save({ transaction_type: 'card', sub_total: $ctrl.total(), tax: $ctrl.tax(), discount: $ctrl.discount(), grand_total: $ctrl.calculate(), table: $ctrl._currentTable.tableNumber, people: $ctrl._people, card_recp: $ctrl.cardRecp,
-cash_recv: $ctrl.cashRec, balance: $ctrl.balance() })" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
+            <md-button class="md-secondary md-fab md-mini md-hue-2" ng-click="$ctrl.save()" ng-disabled="!$ctrl.cardRecp || $ctrl.cardRecp.length<3">
               <md-icon md-svg-src="\imgs\check.svg"></md-icon>
             </md-button>
           </md-input-container>

@@ -15,36 +15,47 @@ export default class OrderCtrl {
     LOCATION.set(this, $location);
     DISCOUNT.set(this, Discount);
 
-    this._items = [];
     this._shift = false;
     this._showPaymentTypes = false;
-    this._enableAgain = false;
     this._showCashIn = false;
     this._showCardIn = false;
-    this._tables = [];
     this._currentTable = null;
+    this._people = 1;
     this._serves = [];
     this._bills = [];
+    this._items = [];
+    this._tables = [];
+    this._currentTrans = {};
     this._blankTable = {
       tableNumber: null,
       order: {},
       occupied: false
     }
-    this._people = 1;
+    this._blanktrans = {
+      properties: {},
+      grand_total: null,
+      discount_value: null,
+      cash: null,
+      balance: null,
+      items_total: null,
+      tax: null,
+      transaction_type: ''
+    }
+    
 
     this._init();
   }
 
-  _init () {
+  _init() {
     ITEM.get(this).all().then((data) => {
       this._items = data;
     });
 
     SHIFT.get(this).getTables().then((data) => {
       this._numbers = data.value;
-      for(var i=0; i<this._numbers; i++) {
+      for (var i = 0; i < this._numbers; i++) {
         let table = _.clone(this._blankTable);
-        table.tableNumber = i+1;
+        table.tableNumber = i + 1;
         this._tables.push(table);
       }
     });
@@ -53,96 +64,94 @@ export default class OrderCtrl {
       this._discounts = data;
     });
 
-    this._hideOrderBox = false;
+    this._currentTrans = _.clone(this._blanktrans);
   }
 
-  getShift () {
+  getShift() {
     return SHIFT.get(this).current();
   }
 
-  order () {
+  order() {
     return ORDER.get(this).order();
   }
 
-  increment (itemID) {
+  increment(itemID) {
     ORDER.get(this).addItem(itemID);
   }
 
-  decrement (itemID) {
+  decrement(itemID) {
     ORDER.get(this).removeItem(itemID);
   }
 
-  total () {
+  itemsTotal() {
     return ORDER.get(this).getTotal(this._items);
   }
 
-  tax () {
-    return ORDER.get(this).getTax(this.total());
+  tax() {
+    return ORDER.get(this).getTax(this.itemsTotal());
   }
 
-  discount () {
-    return ORDER.get(this).getDiscount(this.total() + this.tax());
+  discountValue() {
+    return ORDER.get(this).getDiscount(this.itemsTotal() + this.tax());
   }
 
-  peopleUp () {
+  peopleUp() {
     this._people++;
   }
 
-  peopleDown () {
+  peopleDown() {
     this._people--;
   }
 
-  save (props) {
-    console.log(props);
-    props = (props) ? {properties: props} : false;
-    ORDER.get(this).save(props);
-    ORDER.get(this).duplicatePrint(props);
-    this._showPaymentTypes = !this._showPaymentTypes;
-    this.print(props, true);
-    if(this._currentTable) {
-      let index = this._tables.indexOf(this._currentTable);
-      this._tables[index].order = {};
-      this._tables[index].occupied = false;
-      let ser = this._serves.indexOf(this._currentTable);
-      this._serves.splice(ser, 1);
-      this._currentTable = null;
+  save() {
+    this._currentTrans.transaction_type = this._transaction_type;
+    this._currentTrans.grand_total = this.calculateGTotal();
+    this._currentTrans.discount_value = this.discountValue();
+    this._currentTrans.items_total = this.itemsTotal();
+    this._currentTrans.tax = this.tax();
+    this._currentTrans.cash = parseInt(this.cashRecieve);
+    this._currentTrans.balance = this.balance();
+    if(this._transaction_type == 'card') {
+      this._currentTrans.cash = 0;
+      this._currentTrans.balance = 0;
     }
-    this._showCashIn = false;
-    this._showCardIn = false;
-    this.cashRec = null;
-    this.cardRecp = null;
-    this._people = 0;
+
+    let tableNumber = 'Take Away';
+    if (this._currentTable){
+      tableNumber = this._currentTable.tableNumber;
+    }
+
+    this._currentTrans.properties = {
+      table: tableNumber,
+      people: this._people,
+      card_recp: this.cardRecp 
+    }
+
+    console.log(this._currentTrans);
 
   }
 
-  print (props, flag) {
-    if(angular.isUndefined(flag)) {
-      props = (props) ? {properties: props} : false;
+  print(props, flag) {
+    if (angular.isUndefined(flag)) {
+      props = (props) ? {
+        properties: props
+      } : false;
     }
-    //ORDER.get(this).print(props);
     ORDER.get(this).reset();
     LOCATION.get(this).path('/');
-    // .then(r => {
-    //   this._enableAgain = true;
-    //   LOCATION.get(this).path('/error/');
-    // }, e =>{
-    //   ORDER.get(this).reset();
-    //   this._enableAgain = false;
-    //   LOCATION.get(this).path('/');
-    // });
   }
 
-  endShift () {
+  endShift() {
     this._hideOrderBox = true;
     LOCATION.get(this).path('/summary/');
   }
 
-  showPaymentTypes (props) {
+  showPaymentTypes(props) {
     this._showPaymentTypes = !this._showPaymentTypes;
   }
 
-  abort () {
-    if(this._currentTable) {
+  abort() {
+    if (this._currentTable) {
       let index = this._tables.indexOf(this._currentTable);
       this._tables[index].order = {};
       this._tables[index].occupied = false;
@@ -157,13 +166,13 @@ export default class OrderCtrl {
     LOCATION.get(this).path('/');
   }
 
-  back () {
+  back() {
     LOCATION.get(this).path('/');
   }
 
-  hold () {
+  hold() {
     this._hold = ORDER.get(this).hold();
-    if(this._showPaymentTypes) {
+    if (this._showPaymentTypes) {
       this._showPaymentTypes = !this._showPaymentTypes;
     }
   }
@@ -173,7 +182,7 @@ export default class OrderCtrl {
   }
 
   setTable(table) {
-    if(this._currentTable) {
+    if (this._currentTable) {
       this._currentTable.occupied = false;
     }
     this._currentTable = table;
@@ -197,27 +206,24 @@ export default class OrderCtrl {
     this.hold();
   }
 
-  printAgain(props) {
-    props = (props) ? {properties: props} : false;
-    ORDER.get(this).print(props);
-  }
-
   cashIn() {
     this._showCashIn = true;
+    this._transaction_type = 'cash';
   }
 
   cardIn() {
     this._showCardIn = true;
+    this._transaction_type = 'card';
   }
 
-  calculate() {
+  calculateGTotal() {
     let amount = 0;
-    amount = (this.total() + this.tax()) - this.discount();
+    amount = (this.itemsTotal() + this.tax()) - this.discountValue();
     return Math.round(amount);
   }
 
   balance() {
-    return Math.round(this.cashRec - this.calculate());
+    return Math.round(parseInt(this.cashRecieve) - this.calculateGTotal());
   }
 
   // methods
