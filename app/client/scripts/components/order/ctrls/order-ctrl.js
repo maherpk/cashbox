@@ -215,6 +215,7 @@ export default class OrderCtrl {
     this._currentTable.order = ORDER.get(this).serve();
     this._serves.push(this._currentTable);
     this._currentTable = null;
+    this.resetOperations();
   }
 
   closeServe(serve) {
