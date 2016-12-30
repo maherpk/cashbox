@@ -1,3 +1,12 @@
 <md-button class="md-primary" ng-click="$routeCtrl.startShift()">
-  Start Shift
+    Start Shift
 </md-button>
+<div layout="row" ng-show="$routeCtrl._trigger">
+    <md-input-container flex>
+        <label>Shift Password</label>
+        <input type="password" name="password" ng-model="$routeCtrl._password">
+    </md-input-container>
+</div>
+<div layout="row" ng-show="$routeCtrl._trigger">
+    <md-button class="md-primary" ng-click="$routeCtrl.setPassword()" ng-disabled="!$routeCtrl._password">Proceed</md-button>
+</div>

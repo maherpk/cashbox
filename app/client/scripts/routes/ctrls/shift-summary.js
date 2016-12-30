@@ -6,7 +6,7 @@ const TRANSACTION = new WeakMap();
 const ITEM = new WeakMap();
 
 export default class ShiftSummaryCtrl {
-  constructor (Shift, $location, Transaction, $mdDialog, Item, $timeout) {
+  constructor(Shift, $location, Transaction, $mdDialog, Item, $timeout) {
     'ngInject';
 
     ITEM.set(this, Item);
@@ -14,7 +14,7 @@ export default class ShiftSummaryCtrl {
     LOCATION.set(this, $location);
     TRANSACTION.set(this, Transaction);
     this.$timeout = $timeout;
-    
+
     this._transactions = [];
     this._items = [];
     this._totalCash = 0;
@@ -23,15 +23,16 @@ export default class ShiftSummaryCtrl {
     this._selectedPurchase = {};
     this._transactionsIds = [];
     this._shiftItems = [];
+    this._password = null;
 
     this._init();
   }
 
   _init() {
 
-  	this._currentShift = SHIFT.get(this).current();
+    this._currentShift = SHIFT.get(this).current();
 
-  	SHIFT.get(this).allTransactions().then(r => {
+    SHIFT.get(this).allTransactions().then(r => {
       //console.log(r);
       this._transactions = r;
       this._shiftTotal(r);
@@ -47,25 +48,28 @@ export default class ShiftSummaryCtrl {
       this._items = r;
     });
 
-    
+    SHIFT.get(this).password().then(r => {
+      this._password = r.value;
+    });
+
   }
 
   _transactionItems(trans) {
-  	let transBook = {};
-  		TRANSACTION.get(this).getLineItems(t.id).then(r => {
-  			transBook['items'] = r;
-  		});
-  		this._transactions.push(transBook);
+    let transBook = {};
+    TRANSACTION.get(this).getLineItems(t.id).then(r => {
+      transBook['items'] = r;
+    });
+    this._transactions.push(transBook);
 
     return transBook;
   }
 
   _shiftTotal(transactions) {
     //console.log(transactions);
-    angular.forEach(transactions, (singleton) =>{
-      if (singleton.properties.transaction_type=="cash") {
+    angular.forEach(transactions, (singleton) => {
+      if (singleton.properties.transaction_type == "cash") {
         this._totalCash += this.calculate(singleton.properties);
-      } else if (singleton.properties.transaction_type=="card") {
+      } else if (singleton.properties.transaction_type == "card") {
         this._totalCard += this.calculate(singleton.properties);
       }
     });
@@ -78,9 +82,18 @@ export default class ShiftSummaryCtrl {
     });
   }
 
+  launchEnd() {
+    this._showForm = true;
+  }
+
   endShift() {
-  	SHIFT.get(this).end();
-  	LOCATION.get(this).path('/');
+    if (this._passwordIn == this._password) {
+      this._trigger = false;
+      SHIFT.get(this).end();
+      LOCATION.get(this).path('/');
+    } else {
+      this._trigger = true;
+    }
   }
 
   cancel() {
@@ -103,16 +116,16 @@ export default class ShiftSummaryCtrl {
   printSum(data) {
     SHIFT.get(this).printSummary(data).then(r => {
       console.log(r);
-     });
+    });
     SHIFT.get(this).sendCsvEmail().then(r => {
       console.log(r);
     });
   }
 
-  itemNames (array) {
+  itemNames(array) {
     let items = [];
-    angular.forEach(array, (singleton) =>{
-      if(singleton.name in items) {
+    angular.forEach(array, (singleton) => {
+      if (singleton.name in items) {
         let old = parseInt(items[singleton.name].quantity);
         let n = parseInt(singleton.quantity) + old;
         items[singleton.name].quantity = n;
