@@ -139,4 +139,22 @@ export default class Shift {
     });
     return defer.promise;
   }
+
+  password () {
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/setting/password/', (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
+
+  setPassword (data) {
+    let defer = Q.get(this).defer();
+    Meteor.call('/orm/setting/set-password/',data, (error, result) => {
+      (error) ? defer.reject(error) : false;
+      (result) ? defer.resolve(result) : false;
+    });
+    return defer.promise;
+  }
 }

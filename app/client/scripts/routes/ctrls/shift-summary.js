@@ -23,6 +23,7 @@ export default class ShiftSummaryCtrl {
     this._selectedPurchase = {};
     this._transactionsIds = [];
     this._shiftItems = [];
+    this._password = null;
 
     this._init();
   }
@@ -32,7 +33,6 @@ export default class ShiftSummaryCtrl {
   	this._currentShift = SHIFT.get(this).current();
 
   	SHIFT.get(this).allTransactions().then(r => {
-      //console.log(r);
       this._transactions = r;
       this._shiftTotal(r);
     });
@@ -47,7 +47,9 @@ export default class ShiftSummaryCtrl {
       this._items = r;
     });
 
-    
+    SHIFT.get(this).password().then(r => {
+      this._password = r.value;
+    });
   }
 
   _transactionItems(trans) {
@@ -63,10 +65,10 @@ export default class ShiftSummaryCtrl {
   _shiftTotal(transactions) {
     //console.log(transactions);
     angular.forEach(transactions, (singleton) =>{
-      if (singleton.properties.transaction_type=="cash") {
-        this._totalCash += this.calculate(singleton.properties);
-      } else if (singleton.properties.transaction_type=="card") {
-        this._totalCard += this.calculate(singleton.properties);
+      if (singleton.transaction_type=="cash") {
+        this._totalCash += parseFloat(singleton.grand_total);
+      } else if (singleton.transaction_type=="card") {
+        this._totalCard += parseFloat(singleton.grand_total);
       }
     });
   }
@@ -78,9 +80,20 @@ export default class ShiftSummaryCtrl {
     });
   }
 
+  launchEnd() {
+    console.log('here');
+    this._showForm = true;
+  }
+
   endShift() {
-  	SHIFT.get(this).end();
-  	LOCATION.get(this).path('/');
+    if(this._passwordIn == this._password) {
+      this._trigger = false;
+      SHIFT.get(this).end();
+      LOCATION.get(this).path('/');
+    } else  {
+      this._trigger = true;
+    }
+  	
   }
 
   cancel() {
@@ -88,7 +101,6 @@ export default class ShiftSummaryCtrl {
   }
 
   generateSlip() {
-   
     SHIFT.get(this).shiftItems(this._currentShift).then(r => {
       this.itemNames(r);
     });
@@ -114,6 +126,7 @@ export default class ShiftSummaryCtrl {
         items[singleton.name] = singleton;
       }
     });
+
     let data = {};
     data.cash = this._totalCash;
     data.card = this._totalCard;
@@ -123,10 +136,5 @@ export default class ShiftSummaryCtrl {
     }
     this.printSum(data);
   }
-
-  calculate(props) {
-    return parseInt(props.grand_total);
-  }
-
 
 }
