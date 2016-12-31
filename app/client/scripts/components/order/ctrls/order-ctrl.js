@@ -23,6 +23,9 @@ export default class OrderCtrl {
     this._discountAmount = 0;
     this._discountId = null;
     this._people = 1;
+    this._password = null;
+    this._trigger = false;
+    this._triggerError = false;
     this._serves = [];
     this._bills = [];
     this._items = [];
@@ -65,6 +68,10 @@ export default class OrderCtrl {
     DISCOUNT.get(this).all().then(data => {
       this._discounts = data;
     });
+
+    // SHIFT.get(this).password().then(r => {
+    //   this._password = r.value;
+    // });
 
     this._currentTrans = _.clone(this._blanktrans);
   }
@@ -179,8 +186,14 @@ export default class OrderCtrl {
   }
 
   endShift() {
-    this._hideOrderBox = true;
-    LOCATION.get(this).path('/summary/');
+    if (this._password == this._passwordIn) {
+      this._trigger = false;
+      this._triggerError = false;
+      this._passwordIn = null;
+      LOCATION.get(this).path('/summary/');
+    } else  {
+      this._triggerError =  true;
+    }
   }
 
   showPaymentTypes() {
@@ -251,6 +264,11 @@ export default class OrderCtrl {
 
   balance() {
     return Math.round(parseInt(this.cashRecieve) - this.calculateGTotal());
+  }
+
+  triggerSummary() {
+    this._password = this.getShift().properties.password;
+    this._trigger = true;
   }
 
 }

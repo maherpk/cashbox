@@ -46,10 +46,6 @@ export default class ShiftSummaryCtrl {
     ITEM.get(this).all().then(r => {
       this._items = r;
     });
-
-    SHIFT.get(this).password().then(r => {
-      this._password = r.value;
-    });
   }
 
   _transactionItems(trans) {
@@ -81,7 +77,7 @@ export default class ShiftSummaryCtrl {
   }
 
   launchEnd() {
-    console.log('here');
+    this._password = SHIFT.get(this).current().properties.password;
     this._showForm = true;
   }
 

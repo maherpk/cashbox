@@ -24,10 +24,11 @@ export default class HomeCtrl {
   }
 
   setPassword() {
-    SHIFT.get(this).setPassword(this._password).then((data) => {
-    });
+    let obj = {
+      password: this._password
+    }
 
-    SHIFT.get(this).start().then((data) => {
+    SHIFT.get(this).start(obj).then((data) => {
     //console.log(data);
     LOCATION.get(this).path('/cats/');
     }, (error) => {

@@ -7,10 +7,22 @@
           Go Back
       </md-button>
       <md-button class="md-raised md-primary"
-        ng-click="$ctrl.endShift()"
+        ng-click="$ctrl.triggerSummary()"
         flex>
-          End Shift
+          Summary
       </md-button>
+    </div>
+    <div layout="row" ng-show="$ctrl._trigger">
+      <md-input-container flex>
+        <label>Password</label>
+        <input type="password" name="password" ng-model="$ctrl._passwordIn">
+      </md-input-container>
+    </div>
+    <div layout="row" ng-show="$ctrl._trigger">
+      <md-button class="md-raised md-primary" ng-click="$ctrl.endShift()" ng-disabled="!$ctrl._passwordIn" flex>Go</md-button>
+    </div>
+    <div layout="row" ng-show="$ctrl._triggerError" layout-align="center center">
+      <p>Wrong Password !!!</p>
     </div>
     <div layout="row" layout-align="center center">
       <h1>Available Tables</h1>

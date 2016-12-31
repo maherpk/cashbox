@@ -23,16 +23,3 @@ Meteor.methods({'/orm/setting/discount/': () => {
 	}).run()[0];
 }});
 
-Meteor.methods({'/orm/setting/password/': () =>{
-	return Setting.select('*').where({
-		key: 'Password'
-	}).run()[0];
-}});
-
-Meteor.methods({'/orm/setting/set-password/': (data) => {
-	return Setting.where({
-		key: 'Password'
-	}).update({
-		value: data
-	}).run()[0];
-}});
