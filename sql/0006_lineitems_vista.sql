@@ -6,7 +6,7 @@ SELECT
     shift_id,
     itms.name as name,
     quantity,
-    transaction_id as transaction,
+    transaction_id,
     itms.price as unit_price,
     itms.price*quantity as item_total,
     itms.category_id,
