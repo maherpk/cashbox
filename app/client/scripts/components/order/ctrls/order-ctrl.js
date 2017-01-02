@@ -148,8 +148,9 @@ export default class OrderCtrl {
 
   save() {
     this.prepare();
-    ORDER.get(this).save(this._currentTrans).then(r => {
-      ORDER.get(this).duplicatePrint(this._currentTrans, r);
+    let props = this._currentTrans;
+    ORDER.get(this).save(props).then(r => {
+      ORDER.get(this).duplicatePrint(props, r);
     });
 
     this.resetOperations();
