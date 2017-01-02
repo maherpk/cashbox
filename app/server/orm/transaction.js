@@ -24,6 +24,7 @@ Meteor.methods({
   },
 
   '/orm/transactions/print/': (data) => {
+    console.log(data);
     let resp = {};
     try {
       let device = new Escpos.USB();
@@ -36,10 +37,14 @@ Meteor.methods({
       obj.ITEMS = data.items;
       obj.People = data.trans.properties.people;
       obj.Table = data.trans.properties.table;
-      obj.SalesTax = parseFloat(data.trans.tax).toFixed(2)
-      obj.Discount = parseFloat(data.trans.discount_value).toFixed(2)
-      obj.SubTotal = parseFloat(data.trans.items_total).toFixed(2)
-      obj.GrandTotal = parseFloat(data.trans.grand_total).toFixed(2)
+      obj.SalesTax = parseFloat(data.trans.tax).toFixed(2);
+      obj.Discount = parseFloat(data.trans.discount_value).toFixed(2);
+      obj.SubTotal = parseFloat(data.trans.items_total).toFixed(2);
+      obj.GrandTotal = parseFloat(data.trans.grand_total).toFixed(2);
+      let tS = 'Table'+obj.Table;
+      let tSSpaced = 'Table'+ ' '.repeat(23-tS.length)+obj.Table;
+      let cS = 'Cover'+obj.People;
+      let cSSpaced = 'Cover'+ ' '.repeat(23-cS.length)+obj.People;
 
       Escpos.Image.load('../web.browser/app/imgs/logo.png', function(image) {
 
@@ -56,7 +61,7 @@ Meteor.methods({
             .style('bu')
             .text('Purchase Invoice')
             .text(obj.DATE)
-            .text('Cover'+ ' '.repeat(20-7)+obj.People+ ' '.repeat(4) + 'Table'+' '.repeat(24-7)+obj.Table)
+            .text(cSSpaced+'  '+tSSpaced)
             .font('b')
             .style('normal')
             .text('_'.repeat(48))
@@ -87,8 +92,8 @@ Meteor.methods({
           let sTSpaced = 'Sales Tax' + " ".repeat(48 - sT.length) + obj.SalesTax;
           printer
             .text(sTSpaced)
-          let dT = 'Discount 20%' + obj.Discount;
-          let dTSpaced = 'Discount 20%' + " ".repeat(48 - dT.length) + obj.Discount;
+          let dT = 'Discount' + obj.Discount;
+          let dTSpaced = 'Discount' + " ".repeat(48 - dT.length) + obj.Discount;
           printer
             .text(dTSpaced)
             .size(2, 2)
@@ -118,6 +123,7 @@ Meteor.methods({
   },
 
   '/orm/transactions/duplicate-print/': (data, id) => {
+    console.log(data);
     let resp = {};
     try {
       let device = new Escpos.USB();
@@ -138,6 +144,10 @@ Meteor.methods({
       obj.CashIn = parseFloat(data.trans.cash).toFixed(2);
       obj.CardRecp = data.trans.recp;
       obj.Balance = Math.floor(data.trans.balance);
+      let tS = 'Table'+obj.Table;
+      let tSSpaced = 'Table'+ ' '.repeat(23-tS.length)+obj.Table;
+      let cS = 'Cover'+obj.People;
+      let cSSpaced = 'Cover'+ ' '.repeat(23-cS.length)+obj.People;
 
       let bN = 'Bill#' + String(obj.Id);
       let bNSpaced = 'Bill#' + ' '.repeat(48-bN.length) + String(obj.Id);
@@ -158,7 +168,7 @@ Meteor.methods({
             .text('Purchase Invoice')
             .size(3, 3)
             .text(obj.DATE)
-            .text('Cover'+ ' '.repeat(20-7)+obj.People+ ' '.repeat(4) + 'Table'+' '.repeat(24-7)+obj.Table)
+            .text(cSSpaced+'  '+tSSpaced)
             .text(bNSpaced)
             .font('b')
             .style('normal')
@@ -190,8 +200,8 @@ Meteor.methods({
           let sTSpaced = 'Sales Tax 16%' + " ".repeat(48 - sT.length) + obj.SalesTax;
           printer
             .text(sTSpaced)
-          let dT = 'Discount 20%' + obj.Discount;
-          let dTSpaced = 'Discount 20%' + " ".repeat(48 - dT.length) + obj.Discount;
+          let dT = 'Discount' + obj.Discount;
+          let dTSpaced = 'Discount' + " ".repeat(48 - dT.length) + obj.Discount;
           printer
             .text(dTSpaced)
             .size(2, 2)

@@ -101,8 +101,7 @@ export default class Order {
     obj = obj ? obj : {};
     let order = _.clone(this._order);
     let shiftID = SHIFT.get(this).current().id;
-    let transactionId = null;
-
+    console.log(this._order);
     obj.shift_id = shiftID;
     TRANSACTION.get(this).save(obj).then(data => {
       defer.resolve(data);
@@ -112,7 +111,7 @@ export default class Order {
         TRANSACTION.get(this).addLineItem(singleton);
       });
     });
-    
+    console.log(this._order);
     return defer.promise;
   }
 
@@ -126,7 +125,6 @@ export default class Order {
       item.Quantity = singleton.quantity;
       item.Name = FILTER.get(this)('itemName')(singleton.item_id, this._items);
       item.Price = FILTER.get(this)('itemPrice')(singleton.item_id, this._items) * singleton.quantity;
-      console.log(item.Name);
       this._renderdItems.push(item);
     });
 
@@ -147,6 +145,7 @@ export default class Order {
     let defer = Q.get(this).defer();
     this._renderTransaction.trans = transaction;
     let order = _.clone(this._order);
+    
     this._renderdItems = [];
     _.forEach(order, (singleton) => {
       let item = _.clone(this._blankItem);

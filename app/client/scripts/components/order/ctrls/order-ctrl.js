@@ -150,10 +150,10 @@ export default class OrderCtrl {
     this.prepare();
     let props = this._currentTrans;
     ORDER.get(this).save(props).then(r => {
-      ORDER.get(this).duplicatePrint(props, r);
+      ORDER.get(this).duplicatePrint(props, r).then(r => {
+        this.resetOperations();
+      });
     });
-
-    this.resetOperations();
   }
 
   resetOperations() {
