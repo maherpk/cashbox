@@ -26,6 +26,8 @@ export default class OrderCtrl {
     this._password = null;
     this._trigger = false;
     this._triggerError = false;
+    this._choosenSet = null;
+    this._tableSets = ['A', 'B', 'C', 'D']
     this._serves = [];
     this._bills = [];
     this._items = [];
@@ -165,6 +167,7 @@ export default class OrderCtrl {
     this._showPaymentTypes = false;
     this._transaction_type = '';
     this._temp = null;
+    this._choosenSet = null;
     this.resetTables();
     ORDER.get(this).reset();
     LOCATION.get(this).path('/');
@@ -219,9 +222,12 @@ export default class OrderCtrl {
   setTable(table) {
     if (this._currentTable) {
       this._currentTable.occupied = false;
+      this._currentTable.tableNumber = this._currentTable.tableNumber.replace(/\D/g,'');
     }
     this._currentTable = table;
     table.occupied = true;
+    let tN = table.tableNumber;
+    this._currentTable.tableNumber = this._choosenSet + tN;
   }
 
   serve() {
@@ -270,6 +276,11 @@ export default class OrderCtrl {
   triggerSummary() {
     this._password = this.getShift().properties.password;
     this._trigger = true;
+  }
+
+  choseSet(set) {
+    this._choosenSet = set;
+
   }
 
 }

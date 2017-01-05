@@ -28,7 +28,16 @@
       <h1>Available Tables</h1>
     </div>
     <md-divider></md-divider>
-    <div layout="row" class="wrap">
+    <div layout="row" class="wrap" layout-align="center center">
+      <div ng-repeat="set in $ctrl._tableSets">
+        <md-button class="md-secondary md-fab md-accent md-mini md-hue-2" ng-hide="" ng-click="$ctrl.choseSet(set)">{{ set }}</md-button>
+      </div>
+    </div>
+    <div layout="row" class="wrap" layout-align="center center">
+      <h1>{{ $ctrl._choosenSet }}</h1>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" class="wrap" ng-if="$ctrl._choosenSet">
       <div ng-repeat="table in $ctrl._tables">
         <md-button class="md-secondary md-fab md-warn md-mini md-hue-2" ng-hide="table.occupied" ng-click="$ctrl.setTable(table)">{{ table.tableNumber }}</md-button>
       </div>
