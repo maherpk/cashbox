@@ -1,26 +1,17 @@
-const Q = new WeakMap();
+import BaseEndpoint from './base';
 
-export default class Discount {
+export default class Discount extends BaseEndpoint {
   constructor($q) {
     'ngInject';
-    this.current = undefined;
-    Q.set(this, $q);
+
+    super($q);
+    this._localstorageName = 'orm';
+    this._baseAPIname = 'discounts';
   }
 
   // methods
 
   all () {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/discounts/', (error, result) => {
-      if (error) {
-        defer.reject(error);
-      }
-
-      if (result) {
-        defer.resolve(result);
-      }
-    });
-
-    return defer.promise;
+    return this._request('');
   }
 }
