@@ -1,59 +1,24 @@
+import BaseEndpoint from './base';
 const Q = new WeakMap();
 
-export default class Category {
+export default class Category extends BaseEndpoint {
   constructor($q) {
     'ngInject';
+
+    super($q);
     Q.set(this, $q);
+
+    this._localstorageName = 'orm';
+    this._baseAPIname = 'category';
   }
 
   // methods
 
   all() {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/category/', (error, result) => {
-      if (error) {
-        defer.reject(error);
-      }
-
-      if (result) {
-        defer.resolve(result);
-      }
-    });
-
-    return defer.promise;
+    return this._request('');
   }
 
   add(obj) {
-    let defer = Q.get(this).defer();
-
-    Meteor.call('/orm/category/add/', obj, (error, result) => {
-      if (error) {
-        defer.reject(error);
-      }
-
-      if (result) {
-        defer.resolve(result);
-      }
-    });
-
-    return defer.promise;
-  }
-
-  items (catID) {
-    let defer = Q.get(this).defer();
-
-    Meteor.call('/orm/items/filter/', {
-      category_id: catID
-    }, (error, result) => {
-      if (error) {
-        defer.reject(error);
-      }
-
-      if (result) {
-        defer.resolve(result);
-      }
-    });
-
-    return defer.promise;
+    return this._request('add', obj);
   }
 }

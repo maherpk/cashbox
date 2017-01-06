@@ -19,7 +19,11 @@ export default class BaseEndpoint {
         // is online perform online request 
       } else {
         this._localstorageName = '/orm/';
-        let apiEndpoint = this._localstorageName + this._baseAPIname + '/' + endpoint + '/';
+        let string = this._localstorageName + this._baseAPIname + '/' + endpoint;
+        let apiEndpoint = string;
+        if(string.substr(-1) != '/') {
+          apiEndpoint = apiEndpoint + '/'
+        }
         this._call(apiEndpoint, data).then(r => {
           defer.resolve(r);
         }, e => {

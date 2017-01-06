@@ -1,8 +1,13 @@
+import BaseEndpoint from './base';
 const Q = new WeakMap();
 
-export default class Item {
+export default class Item extends BaseEndpoint {
   constructor($q) {
     'ngInject';
+
+    super($q);
+    this._localstorageName = 'orm';
+    this._baseAPIname = 'items';
     this.current = undefined;
     Q.set(this, $q);
   }
@@ -10,17 +15,11 @@ export default class Item {
   // methods
 
   all () {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/items/', (error, result) => {
-      if (error) {
-        defer.reject(error);
-      }
+    return this._request('');
+  }
 
-      if (result) {
-        defer.resolve(result);
-      }
-    });
-
-    return defer.promise;
+  items (catID) {
+    let data = {category_id: catID}
+    return this._request('filter', data);
   }
 }
