@@ -12,9 +12,11 @@ Meteor.methods({
   '/orm/transactions/add/': (data) => {
     return Transaction.insert(data).returning('id').run()[0];
   },
+
   '/orm/transactions/filter/': (params) => {
     return Transaction.select('*').where(params).run();
   },
+  
   '/orm/transactions/range/': (start, end) => {
     start = new Date(start).toISOString();
     end = new Date(end).toISOString();
@@ -299,9 +301,5 @@ Meteor.methods({
       resp.message = 'Check if Printer is connected and turned On.';
       return resp;
     }
-  },
-
-  '/orm/transactions/in-shift-all/': (params) => {
-    return Transaction.select('id').where(params).run();
   }
 });

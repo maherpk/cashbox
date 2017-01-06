@@ -13,6 +13,7 @@ import Discount from './scripts/services/discount';
 import Item from './scripts/services/item';
 import Order from './scripts/services/order';
 import Transaction from './scripts/services/transaction';
+import Setting from './scripts/services/setting';
 
 // importing filters
 import itemName from './scripts/filters/itemName';
@@ -35,6 +36,7 @@ let app = angular.module('register', [
   .service('Item', Item)
   .service('Order', Order)
   .service('Transaction', Transaction)
+  .service('Setting', Setting)
   .component('order', OrderComponent)
   .run(($rootScope, $location, Shift) => {
     'ngInject';

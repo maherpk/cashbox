@@ -5,15 +5,17 @@ const ITEM = new WeakMap();
 const SHIFT = new WeakMap();
 const LOCATION = new WeakMap();
 const DISCOUNT = new WeakMap();
+const SETTING = new WeakMap();
 
 export default class OrderCtrl {
-  constructor(Order, Item, Shift, Discount, $location) {
+  constructor(Order, Item, Shift, Discount, $location, Setting) {
     'ngInject';
     ORDER.set(this, Order);
     ITEM.set(this, Item);
     SHIFT.set(this, Shift);
     LOCATION.set(this, $location);
     DISCOUNT.set(this, Discount);
+    SETTING.set(this, Setting);
 
     this._shift = false;
     this._showPaymentTypes = false;
@@ -58,7 +60,7 @@ export default class OrderCtrl {
       this._items = data;
     });
 
-    SHIFT.get(this).getTables().then((data) => {
+    SETTING.get(this).getTables().then((data) => {
       this._numbers = data.value;
       for (var i = 0; i < this._numbers; i++) {
         let table = _.clone(this._blankTable);
@@ -70,10 +72,6 @@ export default class OrderCtrl {
     DISCOUNT.get(this).all().then(data => {
       this._discounts = data;
     });
-
-    // SHIFT.get(this).password().then(r => {
-    //   this._password = r.value;
-    // });
 
     this._currentTrans = _.clone(this._blanktrans);
   }

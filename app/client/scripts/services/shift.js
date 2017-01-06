@@ -1,65 +1,40 @@
 import _ from 'lodash';
+import BaseEndpoint from './base';
 
 const Q = new WeakMap();
 
-export default class Shift {
+export default class Shift extends BaseEndpoint {
   constructor($q) {
     'ngInject';
-    this._current = undefined;
+
+    super($q);
     Q.set(this, $q);
+    
+    this._localstorageName = 'orm';
+    this._baseAPIname = 'shifts'
+    this._current = undefined;
+    
   }
 
-  // methods
-
   start (data) {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/shifts/add/',data, (error, result) => {
-      if (error) {
-        defer.reject(error);
-      }
-
-      if (result) {
-        this._current = result;
-        defer.resolve(result);
-      }
-    });
-
-    return defer.promise;
+    return this._request('add', data);
   }
 
   latest () {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/shifts/latest/', (error, result) => {
-      (error) ? defer.reject(error) : false;
-      (result) ? defer.resolve(result) : false;
-    });
-
-    return defer.promise;
+    return this._request('latest');
   }
 
   end (shiftID) {
     shiftID = (shiftID) ? shiftID : this._current.id;
-    Meteor.call('/orm/shifts/end/', shiftID);
+    this._request('end', shiftID);
     this._current = false;
   }
 
   all () {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/shifts/', (error, result) => {
-      if (error) {
-        defer.reject(error);
-      }
-
-      if (result) {
-        defer.resolve(result);
-      }
-    });
-
-    return defer.promise;
+    return this._request('');
   }
 
   current () {
-    //this.allTransactions();
     return this._current;
   }
 
@@ -67,76 +42,23 @@ export default class Shift {
     this._current = _.clone(shift);
   }
 
-  allTransactions (shift) {
-    shift = (shift) ? shift : this.current();
-    let defer = Q.get(this).defer();
-
-    Meteor.call('/orm/transactions/filter/', { shift_id: shift.id }, (error, result) => {
-      if (error) {
-        defer.reject(error);
-      }
-
-      if (result) {
-        defer.resolve(result);
-      }
-    });
-
-    return defer.promise;
-  }
-
-  checkPrinter() {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/shifts/check-printer/', (error, result) =>{
-      (error) ? defer.reject(error) : false;
-      (result) ? defer.resolve(result) : false;
-    });
-    return defer.promise;
-  }
-
-  getTables() {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/setting/tables/', (error, result) => {
-      (error) ? defer.reject(error) : false;
-      (result) ? defer.resolve(result) : false;
-    });
-    return defer.promise;
-  }
-
   printSummary(data) {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/shifts/print-summary/', data, (error, result) => {
-      (error) ? defer.reject(error) : false;
-      (result) ? defer.resolve(result) : false;
-    });
-    return defer.promise;
+    return this._request('print-summary', data);
   }
 
   shiftTransactions(shift) {
     shift = (shift) ? shift : this.current();
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/transactions/in-shift-all/', { shift_id: shift.id }, (error, result) => {
-      (error) ? defer.reject(error) : false;
-      (result) ? defer.resolve(result) : false;
-    });
-    return defer.promise;
+    let data = { shift_id: shift.id };
+    return this._request('all-transactions', data);
   }
 
   shiftItems (shift) {
     shift = (shift) ? shift : this.current();
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/shifts/shift-items/', { shift_id: shift.id }, (error, result) => {
-      (error) ? defer.reject(error) : false;
-      (result) ? defer.resolve(result) : false;
-    });
-    return defer.promise;
+    let data = { shift_id: shift.id };
+    return this._request('shift-items', data);
   }
 
   sendCsvEmail () {
-    let defer = Q.get(this).defer();
-    Meteor.call('/orm/shifts/all-items-csv/', (error, result) => {
-      (error) ? defer.reject(error) : false;
-      (result) ? defer.resolve(result) : false;
-    });
-    return defer.promise;
+    return this._request('all-items-csv');
   }
 }

@@ -21,7 +21,6 @@ export default class ShiftSummaryCtrl {
     this._totalCard = 0;
     this._selectedPurchaseItems = [];
     this._selectedPurchase = {};
-    this._transactionsIds = [];
     this._shiftItems = [];
     this._password = null;
 
@@ -32,15 +31,9 @@ export default class ShiftSummaryCtrl {
 
   	this._currentShift = SHIFT.get(this).current();
 
-  	SHIFT.get(this).allTransactions().then(r => {
+  	SHIFT.get(this).shiftTransactions().then(r => {
       this._transactions = r;
       this._shiftTotal(r);
-    });
-
-    SHIFT.get(this).shiftTransactions().then(r => {
-      angular.forEach(r, (singleton) => {
-        this._transactionsIds.push(singleton.id);
-      });
     });
 
     ITEM.get(this).all().then(r => {

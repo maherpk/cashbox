@@ -20,7 +20,7 @@ export default class CategoryCtrl {
     //
     this._init_();
 
-    Shift.allTransactions();
+    Shift.shiftTransactions();
   }
 
   all () {

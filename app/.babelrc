@@ -1,4 +1,4 @@
 {
   "presets": ["es2015"],
-  "plugins": [["angularjs-annotate", { "explicitOnly" : true}]]
+  "plugins": [["angularjs-annotate", { "explicitOnly" : true}], "transform-class-properties"]
 }

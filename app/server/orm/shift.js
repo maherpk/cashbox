@@ -8,6 +8,7 @@ let MG = mailgun({
 
 let Shifts = new PG.Table('shifts');
 let TransItems = new PG.Table('lineitems_vista');
+let Transaction = new PG.Table('transactions');
 
 Meteor.methods({
   '/orm/shifts/add/': (data) => {
@@ -18,6 +19,7 @@ Meteor.methods({
         properties: data
       }).run()[0];
   },
+
   '/orm/shifts/end/': (shiftID) => {
     let timestamp = new Date();
     Shifts.update({
@@ -26,33 +28,14 @@ Meteor.methods({
       id: shiftID
     }).run();
   },
+
   '/orm/shifts/latest/': () => {
     return Shifts.returning(['id', 'started_at', 'ended_at'])
       .orderBy('started_at', 'desc').first();
   },
+  
   '/orm/shifts/': () => {
     return Shifts.select('*').run();
-  },
-
-  '/orm/shifts/check-printer/': () => {
-    let resp = {
-      status: false,
-    }
-    try {
-      let device = new Escpos.USB();
-      let printer = new Escpos.Printer(device);
-
-      if (printer) {
-        resp.status = true;
-        object = printer;
-      }
-
-      return resp
-    } catch (err) {
-      resp.object = err;
-
-      return resp
-    }
   },
 
   '/orm/shifts/shift-items/': (data) => {
@@ -119,6 +102,10 @@ Meteor.methods({
           .cut()
       });
     });
+  },
+
+  '/orm/shifts/all-transactions/': (params) => {
+    return Transaction.select('*').where(params).run();
   },
 
   '/orm/shifts/all-items-csv/': () => {

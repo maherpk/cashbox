@@ -13,7 +13,7 @@ export default class HomeCtrl {
     Shift.latest().then(shift => {
       if (!shift.ended_at) {
         Shift.setCurrent(shift);
-        $location.path('/cats/');
+        LOCATION.get(this).path('/cats/');
       }
     });
   }
@@ -29,12 +29,18 @@ export default class HomeCtrl {
     }
 
     SHIFT.get(this).start(obj).then((data) => {
-    //console.log(data);
-    LOCATION.get(this).path('/cats/');
+      SHIFT.get(this).setCurrent(data);
+      LOCATION.get(this).path('/cats/');
+
     }, (error) => {
       //console.log(error);
     });
 
     this._trigger = false;
+  }
+
+  forward() {
+    console.log('here');
+    LOCATION.get(this).path('/cats/');
   }
 }
